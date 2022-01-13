@@ -130,3 +130,4 @@ dmypy.json
 
 # Do not commit raw dataset files\
 data/cnn*
+data/scisummnet
