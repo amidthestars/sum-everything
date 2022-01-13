@@ -1,4 +1,4 @@
-import re, io, json, random
+import re, io, json
 
 normalize_chars={'Š':'S', 'š':'s', 'Ð':'Dj','Ž':'Z', 'ž':'z', 'À':'A', 'Á':'A', 'Â':'A', 'Ã':'A', 'Ä':'A',
     'Å':'A', 'Æ':'A', 'Ç':'C', 'È':'E', 'É':'E', 'Ê':'E', 'Ë':'E', 'Ì':'I', 'Í':'I', 'Î':'I',
@@ -8,8 +8,8 @@ normalize_chars={'Š':'S', 'š':'s', 'Ð':'Dj','Ž':'Z', 'ž':'z', 'À':'A', 'Á
     'ï':'i', 'ð':'o', 'ñ':'n', 'ń':'n', 'ò':'o', 'ó':'o', 'ô':'o', 'õ':'o', 'ö':'o', 'ø':'o', 'ù':'u',
     'ú':'u', 'û':'u', 'ü':'u', 'ý':'y', 'ý':'y', 'þ':'b', 'ÿ':'y', 'ƒ':'f',
     'ă':'a', 'î':'i', 'â':'a', 'ș':'s', 'ț':'t', 'Ă':'A', 'Î':'I', 'Â':'A', 'Ș':'S', 'Ț':'T',}
-alphabets=io.open("alphabets.txt", mode="r", encoding="utf-8").read().strip().split("\n")
-emojis=json.load(io.open("emojis.json", mode="r", encoding="utf-8"))
+alphabets=io.open("src/alphabets.txt", mode="r", encoding="utf-8").read().strip().split("\n")
+emojis=json.load(io.open("src/emojis.json", mode="r", encoding="utf-8"))
 for alphabet in alphabets[1:]:
     for ind, char in enumerate(alphabet):
         try:normalize_chars[char]=alphabets[0][ind]
@@ -28,7 +28,7 @@ r2=re.compile(r'https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=\n]{1,256}\.[a-zA-Z0-9
 r3=re.compile(r'[\U00003000\U0000205F\U0000202F\U0000200A\U00002000-\U00002009\U00001680\U000000A0\t]+| {2,}')
 r4=re.compile(r"(.{3,})\1", re.IGNORECASE | re.DOTALL)
 
-def clean(text, author=False):
+def clean(text):
     text= text.translate(normal_map)#handle special chars from other langs
     text= re.sub(r2, r"\1\2\2\3\3\3\4", text.strip()) #remove urls, emails, code blocks, custom emojis, non-emoji, punctuation, letters, and phone numbers
     text= re.sub(r3, " ", text.strip()) #handle... interesting spaces

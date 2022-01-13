@@ -6,12 +6,12 @@ import random
 import subprocess
 from tqdm import tqdm
 import concurrent.futures
-from helpers import clean
+from src.helpers import clean
 
 # Variables - maybe we should argparse these instead
 DATA_URL = "https://docs.google.com/uc?export=download&id=0BwmD_VLjROrfTHk4NFg2SndKcjQ"
 IN = "cnn/stories"
-OUT = "cnn-stories"
+OUT = "cnn_stories"
 PROCESSES = 12
 
 # Download and unzip the dataset

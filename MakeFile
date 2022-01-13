@@ -1,2 +1,3 @@
 clean:
-	rm -rf data/cnn data/cnn-stories*
+	rm -rf __pycache__ data/__pycache__
+	rm -rf data/cnn data/cnn_stories*

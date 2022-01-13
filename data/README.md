@@ -1,9 +1,9 @@
 # Data Processing
 ## General format:
 ```
-[article]\[tsummary]\n
-[article]\[tsummary]\n
-[article]\[tsummary]\n
+[article]\t[summary]\n
+[article]\t[summary]\n
+[article]\t[summary]\n
 ```
 Special characters must be handled. See gen-cnn for a general template to create clean text.<br>
 Newlines are handled by converting them to `/n` instead of the traditional `\n`<br>
