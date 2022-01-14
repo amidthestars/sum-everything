@@ -26,15 +26,17 @@ if not os.path.exists(IN):
 # Define processor
 def preprocess(text):
     # This is an optional function with addional project-specific postprocessing
-    r1 = re.compile(r'\s*<.*?>\s*', re.IGNORECASE)
-    text = re.sub(r1, "", text.strip())
-    text = html.unescape(text.strip())
+    r1 = re.compile(r'</SECTION>|</ABSTRACT>', re.IGNORECASE)
+    r2 = re.compile(r'\s*<.*?>\s*', re.IGNORECASE)
+    text = html.unescape(text.strip().replace("&amp;", "&"))
+    text = re.sub(r1, "/n", text.strip())
+    text = re.sub(r2, " ", text.strip())
     return text.lstrip(("-!.,^# ")).strip()
 
 def worker(split, foldername):
     path=os.path.join(IN, foldername, "Documents_xml")
     article = io.open(os.path.join(path, os.listdir(path)[0]), mode="r", encoding="utf-8").read()
-    article = clean(preprocess(article))
+    article = clean(preprocess(article)).replace("/n ", "/n")
     path=os.path.join(IN, foldername, "summary")
     summary = io.open(os.path.join(path, os.listdir(path)[0]), mode="r", encoding="utf-8").read()
     summary = clean(preprocess(summary))
