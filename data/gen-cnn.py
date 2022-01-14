@@ -11,7 +11,8 @@ from src.helpers import clean
 # Variables - maybe we should argparse these instead
 DATA_URL = "https://docs.google.com/uc?export=download&id=0BwmD_VLjROrfTHk4NFg2SndKcjQ"
 IN = "cnn/stories"
-OUT = "cnn_stories"
+OUT = "../datasets/cnn"
+PREFIX = "cnn"
 PROCESSES = 12
 
 # Download and unzip the dataset
@@ -34,9 +35,11 @@ def worker(split, filename):
 
 # Run concurrent processing
 tasks = os.listdir(IN)
-splits = ["train", "test", "validation"]
-split_distrib = random.choices(splits, weights = [80, 10, 10], k=len(tasks))
-outputs={split:io.open(f"{OUT}.{split}", mode="w", encoding="utf-8") for split in splits}
+splits = ["train", "validation"]
+split_distrib = random.choices(splits, weights = [80, 20], k=len(tasks))
+try: os.makedirs(OUT)
+except FileExistsError: pass
+outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
 with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
     results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks)))
