@@ -5,3 +5,4 @@ tensorflow-text
 flask
 flask-cors
 google-cloud-storage
+termcolor

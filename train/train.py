@@ -1,12 +1,13 @@
 import t5
 import os
+import sys
 import json
 import seqio
 import warnings
 import argparse
 import t5.models
+import importlib.util
 import logging as py_logging
-from src.createtask import init
 import tensorflow.compat.v1 as tf
 from contextlib import contextmanager
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -60,12 +61,16 @@ if args.gpus: assert not args.tpu_address and not args.tpu_topology, "Cannot set
 if args.tpu_address and args.tpu_topology: assert not args.gpus, "Cannot set GPU variables if using TPU"
 
 # Register dataset as a mixture
+ds_registrar_spec = importlib.util.find_spec('src.createtask')
 datasets=json.load(open("datasets.json", "r"))
 for dataset in args.datasets:
     if dataset in datasets:
         info=datasets[dataset]
-        init(info["bucket_path"],info["train_path"], info["validation_path"], 
-            dataset, info["compression_type"], info["store_mode"])
+        new_ds = importlib.util.module_from_spec(ds_registrar_spec)
+        ds_registrar_spec.loader.exec_module(new_ds)
+        sys.modules['new_ds'] = new_ds
+        new_ds.init(info["bucket_path"],info["train_path"], info["validation_path"], 
+                    dataset, info["compression_type"], info["store_mode"])
     else:
         warnings.warn(f"Dataset {dataset} was not in datasets.json, and will not be included.")
         args.datasets.remove(dataset)

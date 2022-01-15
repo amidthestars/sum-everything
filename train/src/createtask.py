@@ -5,6 +5,7 @@ import functools
 from google.cloud import storage
 import tensorflow.compat.v1 as tf
 import tensorflow_datasets as tfds
+from termcolor import cprint
 
 DEFAULT_OUTPUT_FEATURES = {
     "inputs":
@@ -21,7 +22,7 @@ splits, bucket, taskname, compressiontype, storemode = {"train": None, "validati
 def init(bucket_path, train_path, validation_path, task_name, compression_type=None, store_mode="local"):
     global splits, bucket, taskname, compressiontype, storemode
     splits, bucket, taskname, compressiontype, storemode = {"train": train_path, "validation": validation_path}, bucket_path, task_name, compression_type, store_mode
-    print(f"Registering {'gs' if bucket.startswith('gs://') else 'local'} task \"{taskname}\": {taskname}")
+    cprint(f"Registering {'gs' if bucket.startswith('gs://') else 'local'} task \"{taskname}\": {taskname}", 'cyan', attrs=['bold'])
     seqio.TaskRegistry.add(
         taskname,
         # Specify the task source.
@@ -54,7 +55,7 @@ def dataset_fn(split, shuffle_files=False):
     global splits, bucket, compressiontype
     # Load lines from the text file as examples.
     files_to_read=[os.path.join("gs://"+bucket,str(filename.name)) for filename in client.list_blobs(bucket, prefix=splits[split])]
-    print(f"Split {split} contains {len(files_to_read)} shards:\nFirst 10: {files_to_read[0:10]}")
+    cprint(f"Split {split} contains {len(files_to_read)} shards:\nFirst 10: {files_to_read[0:10]}", 'cyan', attrs=['bold'])
     ds = tf.data.TextLineDataset(files_to_read, compression_type=compressiontype).filter(lambda line:tf.not_equal(tf.strings.length(line),0))
     # Split each "<question>\t<answer>" example into (question, answer) tuple.
     ds = ds.shuffle(buffer_size=100000)
@@ -68,7 +69,7 @@ def dataset_fn_local(split, shuffle_files=False):
     global splits, bucket, compressiontype
     # Load lines from the text file as examples.
     files_to_read=[os.path.join(bucket, splits[split],filename) for filename in os.listdir(os.path.join(bucket, splits[split])) if filename.endswith(split)]
-    print(f"Split {split} contains {len(files_to_read)} shards.\nFirst 10: {files_to_read[0:10]}")
+    cprint(f"Split {split} contains {len(files_to_read)} shards.\nFirst 10: {files_to_read[0:10]}", 'cyan', attrs=['bold'])
     ds = tf.data.TextLineDataset(files_to_read, compression_type=compressiontype).filter(lambda line:tf.not_equal(tf.strings.length(line),0))
     # Split each "<question>\t<answer>" example into (question, answer) tuple.
     ds = ds.shuffle(buffer_size=600000)
