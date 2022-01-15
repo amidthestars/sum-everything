@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # Do not commit raw dataset files
-datasets/*
+datasets*
 data/cnn*
 data/scisummnet*
+train/models*

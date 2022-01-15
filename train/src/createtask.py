@@ -41,8 +41,6 @@ def init(bucket_path, train_path, validation_path, task_name, compression_type=N
         output_features=DEFAULT_OUTPUT_FEATURES,
     )
 
-    sample()
-
 def sample(max_in=256, max_out=64):
     global taskname
     ds = seqio.TaskRegistry.get(taskname).get_dataset(split="validation", sequence_length={"inputs": max_in, "targets": max_out})
