@@ -31,7 +31,8 @@ def postprocess(text):
 def worker(split, filename):
     file = io.open(os.path.join(IN, filename), mode="r", encoding="utf-8")
     data = [postprocess(clean(part)) for part in file.read().split("@highlight\n\n")] #apply cleaning to each part
-    return split, data[0], "/n".join([f"- {summary}" for summary in data[1:]])
+    if data[0] and data[1]:
+        return split, data[0], "/n".join([f"- {summary}" for summary in data[1:]])
 
 # Run concurrent processing
 tasks = os.listdir(IN)
@@ -44,8 +45,9 @@ outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding
 with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
     results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks)))
     for result in results:
-        split, article, summary = result
-        outputs[split].write(f"{article}\t{summary}\n")
+        if result != None:
+            split, article, summary = result
+            outputs[split].write(f"{article}\t{summary}\n")
 
 # Close and cleanup
 for output in outputs: outputs[output].close()

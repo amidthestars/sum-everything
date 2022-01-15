@@ -40,7 +40,8 @@ def worker(split, foldername):
     path=os.path.join(IN, foldername, "summary")
     summary = io.open(os.path.join(path, os.listdir(path)[0]), mode="r", encoding="utf-8").read()
     summary = clean(preprocess(summary))
-    return split, article, summary
+    if article and summary:
+        return split, article, summary
 
 # Run concurrent processing
 tasks = os.listdir(IN)
@@ -53,8 +54,9 @@ outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding
 with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
     results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks)))
     for result in results:
-        split, article, summary = result
-        outputs[split].write(f"{article}\t{summary}\n")
+        if result != None:
+            split, article, summary = result
+            outputs[split].write(f"{article}\t{summary}\n")
 
 # Close and cleanup
 for output in outputs: outputs[output].close()

@@ -72,7 +72,7 @@ def dataset_fn_local(split, shuffle_files=False):
     cprint(f"Split {split} contains {len(files_to_read)} shards.\nFirst 10: {files_to_read[0:10]}", 'cyan', attrs=['bold'])
     ds = tf.data.TextLineDataset(files_to_read, compression_type=compressiontype).filter(lambda line:tf.not_equal(tf.strings.length(line),0))
     # Split each "<question>\t<answer>" example into (question, answer) tuple.
-    ds = ds.shuffle(buffer_size=600000)
+    ds = ds.shuffle(buffer_size=100000)
     ds = ds.map(functools.partial(tf.io.decode_csv, record_defaults=["",""], field_delim="\t", use_quote_delim=False),
                 num_parallel_calls=tf.data.experimental.AUTOTUNE)
     ds = ds.map(lambda *ex: dict(zip(["question", "answer"], ex)))
