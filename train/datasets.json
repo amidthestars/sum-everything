@@ -1,0 +1,16 @@
+{
+    "scisummnet": {
+        "bucket_name": "../datasets",
+        "train_path": "scisummnet", 
+        "validation_path": "scisummnet",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "cnn": {
+        "bucket_name": "../datasets",
+        "train_path": "cnn", 
+        "validation_path": "cnn",
+        "compression_type": null,
+        "store_mode": "local"
+    }
+}
