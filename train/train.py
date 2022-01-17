@@ -51,8 +51,8 @@ parser.add_argument('-batch_size', type=int, default=None,
                     help='Batches per step')
 parser.add_argument('-max_checkpoints', type=int, default=None,
                     help='The maximum number of checkpoints to save at once')
-parser.add_argument('-storemode', type=str, default="gs", choices=["gs", "local"],
-                    help='Whee is the dataset and checkpoint saved? Local or google cloud storage.')
+parser.add_argument('-storemode', type=str, default="local", choices=["gs", "local"],
+                    help='Where is the dataset and checkpoint saved? Local or google cloud storage.')
 parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, helping memory usage but reducing overall model efficiency.')
 args = parser.parse_args()

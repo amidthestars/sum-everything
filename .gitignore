@@ -133,3 +133,5 @@ datasets*
 data/cnn*
 data/scisummnet*
 train/models*
+train/export*
+train/test.data

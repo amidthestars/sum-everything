@@ -12,6 +12,9 @@ import tensorflow.compat.v1 as tf
 from contextlib import contextmanager
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
+# Disable GPUs
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 # Set up logging
 tf.get_logger().propagate = False
 py_logging.root.setLevel('INFO')
@@ -25,8 +28,6 @@ def tf_verbosity_level(level):
 parser = argparse.ArgumentParser(description='Finetune T5')
 parser.add_argument('-datasets', nargs='+', type=str, required=True,
                     help='Names of dataset(s) as defined in datasets.json')
-parser.add_argument('-gpus', nargs='+', type=str, default=None,
-                    help='Available GPUs. Input format: "-gpus gpu:0 gpu:1 "...')
 parser.add_argument('-model_size', type=str, default="small", choices=["small", "t5.1.1.small", "base", "large", "3B", "11B"],
                     help='Model size. Match model size used in training')
 parser.add_argument('-models_dir', type=str, default="models",
@@ -97,11 +98,8 @@ tf.io.gfile.makedirs(os.path.join(MODEL_DIR, "validation_eval"))
 model = t5.models.MtfModel(
     model_dir=MODEL_DIR,
     tpu=None,
-    mesh_devices=args.gpus,
-    mesh_shape=f'model:1,batch:{len(args.gpus)}',
     model_parallelism=model_parallelism,
     batch_size=train_batch_size,
-    sequence_length={"inputs": args.in_len, "targets": args.out_len},
     iterations_per_loop=500,
 )
 

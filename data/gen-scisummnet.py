@@ -13,7 +13,7 @@ DATA_URL = "https://cs.stanford.edu/~myasu/projects/scisumm_net/scisummnet_relea
 IN = "scisummnet/top1000_complete"
 OUT = "../datasets/scisummnet"
 PREFIX = "scisummnet"
-PROCESSES = 12
+PROCESSES = 16
 
 # Download and unzip the dataset
 if not os.path.exists("scisummnet.zip"):

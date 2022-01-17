@@ -13,7 +13,7 @@ DATA_URL = "https://docs.google.com/uc?export=download&id=0BwmD_VLjROrfTHk4NFg2S
 IN = "cnn/stories"
 OUT = "../datasets/cnn"
 PREFIX = "cnn"
-PROCESSES = 12
+PROCESSES = 16
 
 # Download and unzip the dataset
 if not os.path.exists("cnn_stories.tgz"):
