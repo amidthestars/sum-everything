@@ -6,11 +6,25 @@
         "compression_type": null,
         "store_mode": "local"
     },
+    "scisummnet_gs": {
+        "bucket_path": "gs://sum-data-us",
+        "train_path": "scisummnet", 
+        "validation_path": "scisummnet",
+        "compression_type": null,
+        "store_mode": "gs"
+    },
     "cnn": {
         "bucket_path": "../datasets",
         "train_path": "cnn", 
         "validation_path": "cnn",
         "compression_type": null,
         "store_mode": "local"
+    },
+    "cnn_gs": {
+        "bucket_path": "gs://sum-data-us",
+        "train_path": "cnn", 
+        "validation_path": "cnn",
+        "compression_type": null,
+        "store_mode": "gs"
     }
 }
