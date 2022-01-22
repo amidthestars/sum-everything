@@ -1,11 +1,16 @@
-import t5
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
+import t5
 import seqio
+import logging
 import functools
+from termcolor import cprint
 from google.cloud import storage
 import tensorflow.compat.v1 as tf
 import tensorflow_datasets as tfds
-from termcolor import cprint
+
+logging.getLogger("tensorflow").setLevel(logging.ERROR)
 
 DEFAULT_OUTPUT_FEATURES = {
     "inputs":
@@ -42,12 +47,10 @@ def init(bucket_path, train_path, validation_path, task_name, compression_type=N
         output_features=DEFAULT_OUTPUT_FEATURES,
     )
 
-def sample(max_in=256, max_out=64):
+def sample(num_samples, split, max_in=256, max_out=64):
     global taskname
-    ds = seqio.TaskRegistry.get(taskname).get_dataset(split="validation", sequence_length={"inputs": max_in, "targets": max_out})
-    print("Preprocessed sample:")
-    for ex in tfds.as_numpy(ds.take(1)):
-        print(ex)
+    ds = seqio.TaskRegistry.get(taskname).get_dataset(split=split, sequence_length={"inputs": max_in, "targets": max_out})
+    return list(tfds.as_numpy(ds.take(num_samples)))
 
 def dataset_fn(split, shuffle_files=False):
     del shuffle_files

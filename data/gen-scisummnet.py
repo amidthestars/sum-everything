@@ -5,6 +5,7 @@ import html
 import random
 import subprocess
 from tqdm import tqdm
+import multiprocessing
 import concurrent.futures
 from src.helpers import clean
 
@@ -13,7 +14,7 @@ DATA_URL = "https://cs.stanford.edu/~myasu/projects/scisumm_net/scisummnet_relea
 IN = "scisummnet/top1000_complete"
 OUT = "../datasets/scisummnet"
 PREFIX = "scisummnet"
-PROCESSES = 16
+PROCESSES = multiprocessing.cpu_count()
 
 # Download and unzip the dataset
 if not os.path.exists("scisummnet.zip"):
