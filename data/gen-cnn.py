@@ -44,7 +44,7 @@ except FileExistsError: pass
 outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
 with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
-    results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks)))
+    results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks), desc=f"Using {PROCESSES} Processes"))
     for result in results:
         if result != None:
             split, article, summary = result

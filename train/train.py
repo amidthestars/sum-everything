@@ -27,8 +27,8 @@ parser.add_argument('-datasets', nargs='+', type=str, required=True,
                     help='Names of dataset(s) as defined in datasets.json')
 parser.add_argument('-gpus', nargs='+', type=str, default=None,
                     help='Available GPUs. Input format: "-gpus gpu:0 gpu:1 "...')
-parser.add_argument('-tpu_address', type=str, default=None,
-                    help='TPU ip address. None if using GPU')
+parser.add_argument('-tpu', type=str, default=None,
+                    help='TPU ip address. None if using GPU. local if TPU is attacked to the local instance.')
 parser.add_argument('-tpu_topology', type=str, default=None, choices=["v2-8","v3-8", None],
                     help='TPU type. None if using GPU')
 parser.add_argument('-in_len', type=int, default=2048,
@@ -57,8 +57,8 @@ parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, helping memory usage but reducing overall model efficiency.')
 args = parser.parse_args()
 
-if args.gpus: assert not args.tpu_address and not args.tpu_topology, "Cannot set TPU variables if using GPU"
-if args.tpu_address and args.tpu_topology: assert not args.gpus, "Cannot set GPU variables if using TPU"
+if args.gpus: assert not args.tpu and not args.tpu_topology, "Cannot set TPU variables if using GPU"
+if args.tpu and args.tpu_topology: assert not args.gpus, "Cannot set GPU variables if using TPU"
 
 # Register dataset as a mixture
 ds_registrar_spec = importlib.util.find_spec('src.createtask')
@@ -81,9 +81,10 @@ seqio.MixtureRegistry.add(
     default_rate=1.0
 )
 
-if args.tpu_address != None:
-    args.tpu_address = f"grpc://{args.tpu_address}:8470"
-    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=args.tpu_address)
+if args.tpu != None:
+    if args.tpu != 'local':
+        args.tpu = f"grpc://{args.tpu}:8470"
+    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=args.tpu)
     tf.enable_eager_execution()
     tf.config.experimental_connect_to_cluster(tpu)
     tf.tpu.experimental.initialize_tpu_system(tpu)
@@ -99,7 +100,7 @@ MODEL_DIR = os.path.join(args.models_dir, MODEL_SIZE)
 # Set parallelism and batch size to fit on v2-8 TPU (if possible).
 # Limit number of checkpoints to fit within 5GB (if possible).
 try:
-    if args.tpu_address and args.tpu_topology:
+    if args.tpu and args.tpu_topology:
         model_parallelism, train_batch_size, keep_checkpoint_max = {
             "small": (1, 512, 4),
             "t5.1.1.small": (1, 512, 4),
@@ -121,10 +122,10 @@ if args.max_checkpoints: keep_checkpoint_max=args.max_checkpoints
 
 tf.io.gfile.makedirs(MODEL_DIR)
 # The models from our paper are based on the Mesh Tensorflow Transformer.
-if args.tpu_address:
+if args.tpu:
     model = t5.models.MtfModel(
         model_dir=MODEL_DIR,
-        tpu=args.tpu_address,
+        tpu=args.tpu,
         tpu_topology=args.tpu_topology,
         model_parallelism=model_parallelism,
         batch_size=train_batch_size,
