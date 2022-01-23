@@ -1,7 +1,8 @@
 t5
-tensorflow
-tensorflow-datasets
-tensorflow-text
+tensorflow==2.6.0
+tensorflow-datasets==2.6.0
+tensorflow-text==2.6.0
+tensorboard==2.6.0
 flask
 flask-cors
 google-cloud-storage
