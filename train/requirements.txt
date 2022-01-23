@@ -1,6 +1,5 @@
 t5
-tensorflow==2.6.0
-tensorflow-datasets==2.6.0
+tensorflow-datasets
 tensorflow-text==2.6.0
 tensorboard==2.6.0
 flask
