@@ -131,6 +131,8 @@ dmypy.json
 # Do not commit raw dataset files
 datasets*
 data/cnn*
+data/idt*
+data/hindu_indian_times_guardian_news.zip
 data/scisummnet*
 train/models*
 train/export*

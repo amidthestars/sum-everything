@@ -1,4 +1,18 @@
 {
+    "idt": {
+        "bucket_path": "../datasets",
+        "train_path": "idt", 
+        "validation_path": "idt",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "idt_gs": {
+        "bucket_path": "gs://sum-data-us",
+        "train_path": "idt", 
+        "validation_path": "idt",
+        "compression_type": null,
+        "store_mode": "gs"
+    },
     "scisummnet": {
         "bucket_path": "../datasets",
         "train_path": "scisummnet", 
