@@ -1,8 +1,8 @@
 t5
 tensorflow-datasets
-tensorflow-text==2.6.0
-tensorboard==2.6.0
-flask
-flask-cors
+tensorflow-text
+tensorboard
+cloud-tpu-profiler
+tensorboard-plugin-profile
 google-cloud-storage
 termcolor

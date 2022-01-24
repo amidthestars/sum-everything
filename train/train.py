@@ -28,7 +28,7 @@ parser.add_argument('-datasets', nargs='+', type=str, required=True,
 parser.add_argument('-gpus', nargs='+', type=str, default=None,
                     help='Available GPUs. Input format: "-gpus gpu:0 gpu:1 "...')
 parser.add_argument('-tpu', type=str, default=None,
-                    help='TPU ip address. None if using GPU. local if TPU is attacked to the local instance.')
+                    help='TPU ip address. None if using GPU. local if TPU is attached to the local instance.')
 parser.add_argument('-tpu_topology', type=str, default=None, choices=["v2-8","v3-8", None],
                     help='TPU type. None if using GPU')
 parser.add_argument('-in_len', type=int, default=2048,
@@ -51,8 +51,6 @@ parser.add_argument('-batch_size', type=int, default=None,
                     help='Batches per step')
 parser.add_argument('-max_checkpoints', type=int, default=None,
                     help='The maximum number of checkpoints to save at once')
-parser.add_argument('-storemode', type=str, default="local", choices=["gs", "local"],
-                    help='Where is the dataset and checkpoint saved? Local or google cloud storage.')
 parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, helping memory usage but reducing overall model efficiency.')
 args = parser.parse_args()
@@ -121,7 +119,7 @@ if args.batch_size: train_batch_size=args.batch_size
 if args.max_checkpoints: keep_checkpoint_max=args.max_checkpoints
 
 tf.io.gfile.makedirs(MODEL_DIR)
-# The models from our paper are based on the Mesh Tensorflow Transformer.
+
 if args.tpu:
     model = t5.models.MtfModel(
         model_dir=MODEL_DIR,

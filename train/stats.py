@@ -2,12 +2,14 @@ import os
 import sys
 import json
 import seqio
+import logging
 import warnings
 import argparse
 import statistics
 import importlib.util
 import tensorflow_datasets as tfds
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+logging.getLogger("tensorflow").setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 
 parser = argparse.ArgumentParser(description='Get dataset statstics')
@@ -52,6 +54,8 @@ print("Dataset creation complete.")
 
 t_in, t_out=[], []
 for sample in train:
+    if len(sample["inputs"]) <= 100:
+        print(f"\n{sample}\n")
     t_in.append(len(sample["inputs"]))
     t_out.append(len(sample["targets"]))
 

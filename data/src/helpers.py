@@ -9,7 +9,6 @@ normalize_chars={'Š':'S', 'š':'s', 'Ð':'Dj','Ž':'Z', 'ž':'z', 'À':'A', 'Á
     'ú':'u', 'û':'u', 'ü':'u', 'ý':'y', 'ý':'y', 'þ':'b', 'ÿ':'y', 'ƒ':'f',
     'ă':'a', 'î':'i', 'â':'a', 'ș':'s', 'ț':'t', 'Ă':'A', 'Î':'I', 'Â':'A', 'Ș':'S', 'Ț':'T',}
 alphabets=io.open("src/alphabets.txt", mode="r", encoding="utf-8").read().strip().split("\n")
-emojis=json.load(io.open("src/emojis.json", mode="r", encoding="utf-8"))
 for alphabet in alphabets[1:]:
     for ind, char in enumerate(alphabet):
         try:normalize_chars[char]=alphabets[0][ind]
@@ -19,12 +18,8 @@ normalize_chars.update({i:i for i in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOP
 normal_map=str.maketrans(normalize_chars)
 del normalize_chars
 
-def convemojis(i):
-    if i in emojis: return emojis[i]
-    return i
-
 #precompile regex
-r2=re.compile(r'https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=\n]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)|:[^\n\s]+?:|[\w\-\.]+@(?:[\w-]+\.)+[\w-]{2,4}|(?:\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|```.+?```\n?|(?:\\n)+|\b(?:a*ha+h[ha]*|o?l+o+l+[ol]*)\b|[^a-z0-9.,:;\'\”@!?\s\<\>\/\-\+\=\(\)\[\]*_'+''.join(emojis)+r']+|(?<=[a-z.,\':;!?\/]) +(?=[.,\'!?\/])|([,\':;\s\/\(\)\[\]\+\-\<\>\=])\1+|([_])\2{2,}|([a-z.!?*])\3{3,}|(: )(?:> (?:.*?)(?:\n+|\\n+|$))+', flags=re.DOTALL | re.IGNORECASE)
+r2=re.compile(r'https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=\n]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)|:[^\n\s]+?:|[\w\-\.]+@(?:[\w-]+\.)+[\w-]{2,4}|(?:\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|```.+?```\n?|(?:\\n)+|[^a-z0-9.,:;\'\”@!?\s\<\>\/\-\+\=\(\)\[\]*_]+|(?<=[a-z.,\':;!?\/]) +(?=[.,\'!?\/])|([,\':;\s\/\(\)\[\]\+\-\<\>\=])\1+|([_])\2{2,}|([a-z.!?*])\3{3,}|(: )(?:> (?:.*?)(?:\n+|\\n+|$))+', flags=re.DOTALL | re.IGNORECASE)
 r3=re.compile(r'[\U00003000\U0000205F\U0000202F\U0000200A\U00002000-\U00002009\U00001680\U000000A0\t]+| {2,}')
 r4=re.compile(r"(.{3,})\1", re.IGNORECASE | re.DOTALL)
 
@@ -32,7 +27,6 @@ def clean(text):
     text= text.translate(normal_map)#handle special chars from other langs
     text= re.sub(r2, r"\1\2\2\3\3\3\4", text.strip()) #remove urls, emails, code blocks, custom emojis, non-emoji, punctuation, letters, and phone numbers
     text= re.sub(r3, " ", text.strip()) #handle... interesting spaces
-    text= "".join(list(map(convemojis,text.strip()))) #translate emojis to their `:text:` shorthand form
     text= "/n".join([ln.strip().strip("\t") for ln in text.split("\n")]) #handle newlines
 
     return text.lstrip(("-!.,^# ")).strip()
