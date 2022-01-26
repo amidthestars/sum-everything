@@ -24,7 +24,23 @@
 
       <label for="txtFile">Enter a '.txt' file to summarize:</label>
 
-      <input type="file" id="txtFile" name="txtFile" accept="txt">
+      <form method="post" enctype=multipart/form-data>
+        <input type="file" name="txtFile" name="txtFile" accept="txt">
+        <br>
+        <input type="submit" />
+      </form>
+
+
+      {% if noFileErr is defined %}
+        <p>
+          {{ noFileErr }}
+        </p>
+      {% elif message is defined%}
+        <p>
+          {{message}}<br>
+          File name: {{ file_name }}
+        </p>
+      {% endif %}
 
     </div>
 
