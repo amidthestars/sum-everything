@@ -40,5 +40,19 @@
         "validation_path": "cnn",
         "compression_type": null,
         "store_mode": "gs"
+    },
+    "bbc": {
+        "bucket_path": "../datasets",
+        "train_path": "bbc",
+        "validation_path": "bbc",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "bbc_gs": {
+        "bucket_path": "gs://sum-data-eu",
+        "train_path": "bbc",
+        "validation_path": "bbc",
+        "compression_type": null,
+        "store_mode": "gs"
     }
 }

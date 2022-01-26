@@ -128,6 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Idea
+.idea*
+
 # Do not commit raw dataset files
 datasets*
 data/cnn*
@@ -137,3 +140,7 @@ data/scisummnet*
 train/models*
 train/export*
 train/test.data
+*.txt
+data/bbc.train
+data/bbc.validation
+data/bbc.zip
