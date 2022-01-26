@@ -47,5 +47,12 @@
         "validation_path": "bbc",
         "compression_type": null,
         "store_mode": "local"
+    },
+    "bbc_gs": {
+        "bucket_path": "gs://sum-data-eu",
+        "train_path": "bbc",
+        "validation_path": "bbc",
+        "compression_type": null,
+        "store_mode": "gs"
     }
 }
