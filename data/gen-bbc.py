@@ -2,6 +2,7 @@ import numpy as np
 import os
 import gdown
 import zipfile
+from src.helpers import clean
 
 DATA_URL = "https://drive.google.com/uc?export=download&id=1i4cPVFTZjVzfOn5GRCzDEc_OHiJ79Rlt"
 IN = "bbc"
@@ -43,7 +44,7 @@ for folder in folders:
             cont_tgt = f_tgt.read()
             cont_tgt = cont_tgt.replace("\n", " ")
             cont_tgt = cont_tgt.replace("\t", " ")
-            outputs[category].write(cont_src + "\t" + cont_tgt + "\n")
+            outputs[category].write(clean(cont_src) + "\t" + clean(cont_tgt) + "\n")
             count[category] += 1
             overall_count[category] += 1
         except:
