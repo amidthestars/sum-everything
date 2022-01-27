@@ -7,7 +7,7 @@
         "store_mode": "local"
     },
     "idt_gs": {
-        "bucket_path": "gs://sum-data-us",
+        "bucket_path": "gs://sum-data-eu",
         "train_path": "idt", 
         "validation_path": "idt",
         "compression_type": null,

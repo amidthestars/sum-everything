@@ -100,16 +100,16 @@ MODEL_DIR = os.path.join(args.models_dir, MODEL_SIZE)
 try:
     if args.tpu and args.tpu_topology:
         model_parallelism, train_batch_size, keep_checkpoint_max = {
-            "small": (1, 512, 4),
-            "t5.1.1.small": (1, 512, 4),
+            "small": (1, 512, 2),
+            "t5.1.1.small": (1, 512, 2),
             "base": (2, 256, 2),
             "large": (4, 128, 2),
             "3B": (8, 16, 1),
             "11B": (8, 4, 1)}[MODEL_SIZE]
     else:
         model_parallelism, train_batch_size, keep_checkpoint_max = {
-            "small": (1, 64, 4),
-            "t5.1.1.small": (1, 64, 4),
+            "small": (1, 64, 2),
+            "t5.1.1.small": (1, 64, 2),
             "base": (2, 16, 2)}[MODEL_SIZE]
 except:
     model_parallelism, train_batch_size, keep_checkpoint_max=None,None,None
