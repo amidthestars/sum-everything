@@ -1,8 +1,0 @@
-t5
-tensorflow-datasets
-tensorflow-text
-tensorboard
-cloud-tpu-profiler
-tensorboard-plugin-profile
-google-cloud-storage
-termcolor
