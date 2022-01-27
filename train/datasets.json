@@ -41,6 +41,20 @@
         "compression_type": null,
         "store_mode": "gs"
     },
+    "xsum": {
+        "bucket_path": "../datasets",
+        "train_path": "xsum",
+        "validation_path": "xsum",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "xsum_gs": {
+        "bucket_path": "gs://sum-data-eu",
+        "train_path": "xsum",
+        "validation_path": "xsum",
+        "compression_type": null,
+        "store_mode": "gs"
+    },
     "bbc": {
         "bucket_path": "../datasets",
         "train_path": "bbc",

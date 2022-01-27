@@ -1,11 +1,14 @@
 import numpy as np
 import os
+import re
 import gdown
 import zipfile
+from tqdm import tqdm
 from src.helpers import clean
 
 DATA_URL = "https://drive.google.com/uc?export=download&id=1i4cPVFTZjVzfOn5GRCzDEc_OHiJ79Rlt"
 IN = "bbc"
+OUT = "../datasets/bbc"
 
 folders = {"business": 510, "entertainment": 386, "politics": 417, "sport": 510, "tech": 401}
 overall_count = [0, 0]
@@ -21,11 +24,12 @@ if not os.path.exists(IN):
         for file in fz.namelist():
             fz.extract(file, ".")
 
-train_data = open("..\\datasets\\bbc.train", "w")
-val_data = open("..\\datasets\\bbc.validation", "w")
+os.makedirs(OUT, exist_ok=True)
+train_data = open(os.path.join(OUT, "bbc.train"), "w")
+val_data = open(os.path.join(OUT, "bbc.validation"), "w")
 
 # clean and distribute data for different category
-for folder in folders:
+for folder in tqdm(folders):
 
     outputs = [train_data, val_data]
     count = [0, 0]
@@ -44,6 +48,7 @@ for folder in folders:
             cont_tgt = f_tgt.read()
             cont_tgt = cont_tgt.replace("\n", " ")
             cont_tgt = cont_tgt.replace("\t", " ")
+            cont_tgt = re.sub(r"([\.!?,])([a-zA-Z\'\"0-9])", r"\1 \2", cont_tgt.strip())
             outputs[category].write(clean(cont_src) + "\t" + clean(cont_tgt) + "\n")
             count[category] += 1
             overall_count[category] += 1

@@ -1,4 +1,3 @@
 gdown
 requests
 tqdm
-zipfile

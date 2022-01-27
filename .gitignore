@@ -140,6 +140,8 @@ data/scisummnet*
 train/models*
 train/export*
 train/test.data
+data/XSUM-EMNLP18-Summary-Data-Original.tar.gz
+data/bbc-summary-data/
 *.txt
 data/bbc.train
 data/bbc.validation
