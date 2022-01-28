@@ -36,19 +36,20 @@ def worker(split, filename):
         return split, data[0], "/n".join([f"- {summary}" for summary in data[1:]])
 
 # Run concurrent processing
-tasks = os.listdir(IN)
-splits = ["train", "validation"]
-split_distrib = random.choices(splits, weights = [80, 20], k=len(tasks))
-try: os.makedirs(OUT)
-except FileExistsError: pass
-outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
+if __name__ == '__main__':
+    tasks = os.listdir(IN)
+    splits = ["train", "validation"]
+    split_distrib = random.choices(splits, weights = [80, 20], k=len(tasks))
+    try: os.makedirs(OUT)
+    except FileExistsError: pass
+    outputs={split:io.open(os.path.join(OUT,f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
 
-with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
-    results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks), desc=f"Using {PROCESSES} Processes"))
-    for result in results:
-        if result != None:
-            split, article, summary = result
-            outputs[split].write(f"{article}\t{summary}\n")
+    with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
+        results = list(tqdm(executor.map(worker, split_distrib, tasks), total = len(tasks), desc=f"Using {PROCESSES} Processes"))
+        for result in results:
+            if result != None:
+                split, article, summary = result
+                outputs[split].write(f"{article}\t{summary}\n")
 
-# Close and cleanup
-for output in outputs: outputs[output].close()
+    # Close and cleanup
+    for output in outputs: outputs[output].close()
