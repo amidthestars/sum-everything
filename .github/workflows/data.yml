@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Print some info...
+        run: printf Running ${{ github.event.inputs.dataset }} with seed ${{ github.event.inputs.seed }}
       - name: Checkout branch
         uses: actions/checkout@v2
         with:
@@ -40,5 +42,5 @@ jobs:
           PROJECT_ID: ${{ secrets.GCLOUD_PROJ_ID }}
           APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD }}
         with:
-          args: cp -r datasets/${{ github.event.inputs.dataset }}/* gs://${{ secrets.DATA_PLATFORM }}/${{ github.event.inputs.dataset }}-git
+          args: cp -r datasets/${{ github.event.inputs.dataset }}/* gs://${{ secrets.DATA_PLATFORM }}/${{ github.event.inputs.dataset }}
           cli: gsutil
