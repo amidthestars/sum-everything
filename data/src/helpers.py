@@ -102,5 +102,5 @@ def clean(text):
 
 def parse(text):
     text = text.replace("/n", "\n")
-    
+
     return text.lstrip(("-!.,^# ")).strip()

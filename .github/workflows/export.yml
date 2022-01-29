@@ -1,0 +1,36 @@
+name: Export model
+on: 
+  workflow_dispatch:
+    inputs:
+        model:
+          description: 'Model name as it is on google cloud'
+          required: true
+        batches:
+          description: 'Maximum batches the model can handle'
+          default: '3'
+          required: true
+        temperature:
+          description: 'Model temperature'
+          default: '0.9'
+          required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.branch }}
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        uses: py-actions/py-dependency-install@v3
+        with:
+          path: "train/requirements-export.txt"
+      - name: Export the model
+        working-directory: ./train
+        run: python export.py -dir gs://${{ secrets.MODEL_PLATFORM }}/${{ github.event.inputs.model }}/small -out gs://${{ secrets.EXPORT_PLATFORM }}/${{ github.event.inputs.model }} -batch_size ${{ github.event.inputs.batches }} -temperature ${{ github.event.inputs.temperature }}
