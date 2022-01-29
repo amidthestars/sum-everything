@@ -36,7 +36,6 @@ jobs:
         run: ls && python gen-${{ github.event.inputs.dataset }}.py ${{ github.event.inputs.seed }}
       - name: Upload to gcloud
         uses: actions-hub/gcloud@master
-        working-directory: ./
         env:
           PROJECT_ID: ${{ secrets.GCLOUD_PROJ_ID }}
           APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD }}
