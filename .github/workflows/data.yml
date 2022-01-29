@@ -26,8 +26,8 @@ jobs:
           ref: ${{ github.event.inputs.branch }}
       - name: Install Python
         uses: actions/setup-python@v2
-          with:
-            python-version: 3.8
+        with:
+          python-version: 3.8
       - name: Install dependencies
         uses: py-actions/py-dependency-install@v3
         with:
@@ -45,4 +45,3 @@ jobs:
         with:
           args: cp -r ../datasets gs://${{ secrets.DATA_PLATFORM }}
           cli: gsutil
-      
