@@ -1,6 +1,7 @@
 import os
 import io
 import csv
+import sys
 import tqdm
 import gdown
 import random
@@ -11,6 +12,8 @@ DATA_URL = "https://drive.google.com/uc?export=download&id=14-yvKIYucN9dEq5S9Fcw
 IN = "idt"
 OUT = "../datasets/idt"
 PREFIX = "idt"
+if len(sys.argv) == 1: random.seed(2022)
+else: random.seed(int(sys.argv))
 
 if not os.path.exists("hindu_indian_times_guardian_news.zip"):
     gdown.download(DATA_URL, "hindu_indian_times_guardian_news.zip", quiet=False)

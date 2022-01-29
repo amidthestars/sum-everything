@@ -1,19 +1,21 @@
-import numpy as np
 import os
 import re
+import sys
 import gdown
 import zipfile
+import numpy as np
 from tqdm import tqdm
 from src.helpers import clean
 
 DATA_URL = "https://drive.google.com/uc?export=download&id=1i4cPVFTZjVzfOn5GRCzDEc_OHiJ79Rlt"
 IN = "bbc"
 OUT = "../datasets/bbc"
+if len(sys.argv) == 1: np.random.seed(2022)
+else: np.random.seed(int(sys.argv))
 
 folders = {"business": 510, "entertainment": 386, "politics": 417, "sport": 510, "tech": 401}
 overall_count = [0, 0]
 path = os.getcwd()
-np.random.seed(2022)
 
 if not os.path.exists("bbc.zip"):
     gdown.download(DATA_URL, "bbc.zip", quiet=False)

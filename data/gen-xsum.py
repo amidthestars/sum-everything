@@ -1,15 +1,14 @@
-import concurrent.futures
 import io
-import multiprocessing
 import os
-import random
 import re
+import sys
+import random
 import shutil
-import subprocess
-
 import requests
+import subprocess
 from tqdm import tqdm
-
+import multiprocessing
+import concurrent.futures
 from src.helpers import clean
 
 DATA_URL = "http://bollin.inf.ed.ac.uk/public/direct/XSUM-EMNLP18-Summary-Data-Original.tar.gz"
@@ -18,6 +17,8 @@ OUT = "../datasets/xsum"
 PREFIX = "xsum"
 PROCESSES = multiprocessing.cpu_count()
 DATASET_FILE = DATA_URL.split("/")[-1]
+if len(sys.argv) == 1: random.seed(2022)
+else: random.seed(int(sys.argv))
 
 # Download and unzip the dataset
 if not os.path.exists(DATASET_FILE):

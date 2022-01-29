@@ -1,6 +1,7 @@
 import os
 import io
 import re
+import sys
 import gdown
 import random
 import subprocess
@@ -15,6 +16,8 @@ IN = "cnn/stories"
 OUT = "../datasets/cnn"
 PREFIX = "cnn"
 PROCESSES = multiprocessing.cpu_count()
+if len(sys.argv) == 1: random.seed(2022)
+else: random.seed(int(sys.argv))
 
 # Download and unzip the dataset
 if not os.path.exists("cnn_stories.tgz"):
