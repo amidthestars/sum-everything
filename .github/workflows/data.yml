@@ -6,7 +6,7 @@ on:
           description: 'Dataset file'
           required: true
           default: 'main'
-        dataset:
+        seed:
           description: 'Seed'
           required: true
           default: '2022'
