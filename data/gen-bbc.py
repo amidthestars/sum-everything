@@ -11,7 +11,7 @@ DATA_URL = "https://drive.google.com/uc?export=download&id=1i4cPVFTZjVzfOn5GRCzD
 IN = "bbc"
 OUT = "../datasets/bbc"
 if len(sys.argv) == 1: np.random.seed(2022)
-else: np.random.seed(int(sys.argv))
+else: np.random.seed(int(sys.argv[1]))
 
 folders = {"business": 510, "entertainment": 386, "politics": 417, "sport": 510, "tech": 401}
 overall_count = [0, 0]

@@ -13,7 +13,7 @@ IN = "idt"
 OUT = "../datasets/idt"
 PREFIX = "idt"
 if len(sys.argv) == 1: random.seed(2022)
-else: random.seed(int(sys.argv))
+else: random.seed(int(sys.argv[1]))
 
 if not os.path.exists("hindu_indian_times_guardian_news.zip"):
     gdown.download(DATA_URL, "hindu_indian_times_guardian_news.zip", quiet=False)

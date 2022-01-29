@@ -17,7 +17,7 @@ OUT = "../datasets/scisummnet"
 PREFIX = "scisummnet"
 PROCESSES = multiprocessing.cpu_count()
 if len(sys.argv) == 1: random.seed(2022)
-else: random.seed(int(sys.argv))
+else: random.seed(int(sys.argv[1]))
 
 # Download and unzip the dataset
 if not os.path.exists("scisummnet.zip"):

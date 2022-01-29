@@ -18,7 +18,7 @@ PREFIX = "xsum"
 PROCESSES = multiprocessing.cpu_count()
 DATASET_FILE = DATA_URL.split("/")[-1]
 if len(sys.argv) == 1: random.seed(2022)
-else: random.seed(int(sys.argv))
+else: random.seed(int(sys.argv[1]))
 
 # Download and unzip the dataset
 if not os.path.exists(DATASET_FILE):
