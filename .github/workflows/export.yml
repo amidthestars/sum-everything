@@ -29,7 +29,6 @@ jobs:
         uses: py-actions/py-dependency-install@v3
         with:
           path: "train/requirements-export.txt"
-      - id: 'auth'
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0'
         with:
