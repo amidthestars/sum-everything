@@ -5,7 +5,6 @@ on:
         dataset:
           description: 'Dataset file'
           required: true
-          default: 'main'
         seed:
           description: 'Seed'
           required: true
@@ -43,5 +42,5 @@ jobs:
           PROJECT_ID: ${{ secrets.GCLOUD_PROJ_ID }}
           APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD }}
         with:
-          args: cp -r ../datasets gs://${{ secrets.DATA_PLATFORM }}
+          args: cp -r ../datasets/${{ github.event.inputs.dataset }}/* gs://${{ secrets.DATA_PLATFORM }}/${{ github.event.inputs.dataset }}-1
           cli: gsutil
