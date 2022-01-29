@@ -33,8 +33,7 @@ jobs:
           path: "data/requirements.txt"
       - name: Run dataset construction
         working-directory: ./data
-        run: ls
-        run: python gen-${{ github.event.inputs.dataset }}.py ${{ github.event.inputs.seed }}
+        run: ls && python gen-${{ github.event.inputs.dataset }}.py ${{ github.event.inputs.seed }}
       - name: Upload to gcloud
         uses: actions-hub/gcloud@master
         env:
