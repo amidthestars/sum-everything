@@ -5,7 +5,7 @@ on:
     branches: [ web_page ]
 
 jobs:
-  deploy:
+  deploy-web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 #Be sure you check-out the repo first. Deta CLI needs access to the files
@@ -16,3 +16,4 @@ jobs:
           deta-access-token: ${{ secrets.DETA_TOKEN }} #Deta access token https://docs.deta.sh/docs/cli/auth
           deta-name: 'web' #Deta Micro name https://docs.deta.sh/docs/cli/commands/#deta-clone
           deta-project: 'sum-everything' #Optional: Deta project name https://docs.deta.sh/docs/cli/commands/#deta-clone
+          deta-project-dir: 'sumWeb' #Optional: directory to be deployed on Deta. Default is the root "." 
