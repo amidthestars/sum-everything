@@ -39,4 +39,4 @@ saved_model_path = model.export(
     temperature=args.temperature,  # sample according to predicted distribution
 )
 
-print("Model saved to:", os.path.join(args.out, saved_model_path))
+print("Model saved to:", saved_model_path)

@@ -61,7 +61,8 @@ if __name__ == '__main__':
         for result in results:
             if result != None:
                 split, article, summary = result
-                outputs[split].write(f"{article}\t{summary}\n")
+                if len(article) > len(summary):
+                    outputs[split].write(f"{article}\t{summary}\n")
 
     # Close and cleanup
     for output in outputs: outputs[output].close()

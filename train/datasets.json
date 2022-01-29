@@ -41,6 +41,20 @@
         "compression_type": null,
         "store_mode": "gs"
     },
+    "dailymail": {
+        "bucket_path": "../datasets",
+        "train_path": "dailymail", 
+        "validation_path": "dailymail",
+        "compression_type": null,
+        "store_mode": "local"
+    },
+    "dailymail_gs": {
+        "bucket_path": "gs://sum-data-eu",
+        "train_path": "dailymail", 
+        "validation_path": "dailymail",
+        "compression_type": null,
+        "store_mode": "gs"
+    },
     "xsum": {
         "bucket_path": "../datasets",
         "train_path": "xsum",
