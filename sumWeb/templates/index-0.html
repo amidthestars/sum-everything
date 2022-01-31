@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>summit.ai</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+    <link href= "{{ url_for('static',filename='styles/main.css') }}" rel= "stylesheet" type= "text/css">
+
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans quicksand">
+
+    <div class="p-6 sm:p-10 lg:p-16 flex flex-wrap">
+
+        <div class="w-full lg:w-1/3 lg:pr-32 order-1 lg:order-1 truncate">
+            <div class="max-w-lg lg:float-right lg:text-right leading-loose tracking-tight lg:sticky lg:top-0">
+                <p class="font-bold mt-10 mb-6 lg:my-12">Previous Summaries</p>
+
+                <ul class="flex-fit justify-between flex-col">
+                    <!--li class may nevr be longer than 26 chars-->
+                    <li><a href="#" class="nav">A diam sollicitudin tempor id eue</a></li>
+                    <li><a href="#" class="nav">Lectus vestibulum mattis ullamcorper velit sed ullamcorper</a></li>
+                    <li><a href="#" class="nav">Pulvinar etiam non quam lacus suspendisse faucibus</a></li>
+                </ul>
+                <a href="#" class="normal font-bold hover:font-bold">more...</a>
+            </div>
+        </div>
+        <div class="w-full lg:w-2/3 order-2 lg:order-2">
+            <div id='article' class="max-w-fit leading-loose tracking-tight">
+                <div class="grid grid-cols-2 my-12">
+                    <h1 class="font-bold">Article</h1>
+                    <div class="text-right grid grid-cols-4 gap-2 lg:gap-4">
+                        <hidden></hidden>
+                        <button class="js-edit-text hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow fas fa-pen-nib"></button>
+                        <button class="js-copy-file hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow fas fa-upload"></button>
+                        <form id="file-input-form" method="post" enctype=multipart/form-data class="hidden">
+                            <input id="file-input" type="file" name="txtFile" name="txtFile" accept="txt">
+                        </form>
+                        <button class="hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow fas fa-chevron-right"></button>
+                    </div>
+                </div>
+                {% if noFileErr is defined %}
+                    <p id="input-text" class="mb-8">{{noFileErr}}</p>
+                {% elif message is defined%}
+                    <p id="input-text" class="mb-8">{{message}}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/3 lg:pr-32 pt-12 lg:pt-0 lg:sticky lg:bottom-0 order-4 lg:order-3">
+            <div class="max-w-lg lg:float-right lg:text-right leading-loose tracking-tight lg:mb-16">
+                <p class="font-bold my-4 lg:my-12">Links</p>
+
+                <ul class="flex flex-wrap justify-between flex-row lg:flex-col">
+                    <li><a href="https://github.com/JEF1056/sum-everything" target="_blank" class="nav mx-2 lg:mx-0"><i class="fab fa-github"></i> Github</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-full lg:w-2/3 order-2 lg:order-4">
+            <div class="max-w-fit leading-loose tracking-tight">
+                <div class="grid grid-cols-2 my-12">
+                    <h1 class="font-bold">Summary</h1>
+                    <div class="text-right grid grid-cols-4 gap-2 lg:gap-4">
+                        <hidden></hidden>
+                        <hidden></hidden>
+                        <hidden></hidden>
+                        <button class="js-copy-summary hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow fas fa-copy"></button>
+                    </div>
+                </div>
+                <p id = "summary-text" class="mb-8">Arcu risus quis varius quam quisque id diam vel. Consectetur adipiscing elit ut aliquam purus sit amet. Nibh tortor id aliquet lectus proin nibh. </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Pin to top right corner -->
+    <div class="absolute top-0 right-0 h-12 w-18 p-4">
+        <button class="js-change-theme focus:outline-none">🌙</button>
+    </div>
+
+    <div class="absolute top-0 left-0 h-12 w-18 p-4">
+        <button class="focus:outline-none font-bold">ꜱᴜᴍᴍɪᴛ.ᴀɪ</button>
+    </div>
+
+    <script>
+        //Toggle mode
+        const dark_mode_toggle = document.querySelector('.js-change-theme');
+        const body = document.querySelector('body');
+        //const profile = document.getElementById('profile');
+
+        dark_mode_toggle.addEventListener('click', () => {
+            if (body.classList.contains('text-gray-700')) {
+                dark_mode_toggle.innerHTML = "☀️";
+                body.classList.remove('text-gray-700');
+                body.classList.add('text-gray-300');
+                body.classList.remove('bg-gray-100');
+                body.classList.add('bg-gray-900');
+            } else {
+                dark_mode_toggle.innerHTML = "🌙";
+                body.classList.remove('text-gray-300');
+                body.classList.add('text-gray-700');
+                body.classList.remove('bg-gray-900');
+                body.classList.add('bg-gray-100');
+            }
+        });
+    </script>
+
+
+    <script>
+        // Templates
+        const text_template = document.createElement("p");
+        const input_template = document.createElement("textarea");
+
+        input_template.rows = 6;
+        text_template.classList.add('mb-8')
+        input_template.classList.add('p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'focus:border-gray-500');
+
+        // Edit Trigger
+        const edit_text_toggle = document.querySelector('.js-edit-text');
+        const article_area = document.getElementById("article");
+        let multinewline = /\n+/g;
+
+        edit_text_toggle.addEventListener('click', () => {
+            input_text = document.getElementById("input-text");
+            if (input_text.nodeName == "P") {
+                temp_txt = input_text.innerHTML;
+                temp_element = input_template;
+                temp_txt = temp_txt.replaceAll("<br>", "\n");
+                temp_element.value = temp_txt;
+            } else {
+                temp_txt = input_text.value;
+                temp_element =  text_template;
+                temp_txt = temp_txt.replaceAll(multinewline, "<br><br>");
+                temp_element.innerHTML = temp_txt;
+            }
+            input_text.remove()
+            temp_element.id = "input-text";
+            article_area.append(temp_element);
+        });
+
+        //Copy trigger
+        const copy_summary_buttton = document.querySelector('.js-copy-summary');
+        const summary = document.getElementById("summary-text");
+
+        copy_summary_buttton.addEventListener('click', () => {
+            navigator.clipboard.writeText(summary.innerHTML);
+        });
+
+    </script>
+
+    <script>
+        function readTextFile(file) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function ()
+            {
+                if(rawFile.readyState === 4)
+                {
+                    if(rawFile.status === 200 || rawFile.status == 0)
+                    {
+                        var allText = rawFile.responseText;
+                        alert(allText);
+                    }
+                }
+            }
+            rawFile.send(null);
+        }
+
+        const upload_file_buttton = document.querySelector('.js-copy-file');
+        const file_input = document.getElementById('file-input')
+
+        upload_file_buttton.addEventListener('click', () => {
+            file_input.click();
+            console.log(file_input.value);
+        });
+
+        file_input.onchange = function() {
+            document.getElementById("file-input-form").submit();
+        };
+    </script>
+</body>
+
+</html>

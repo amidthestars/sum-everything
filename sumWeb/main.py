@@ -25,17 +25,17 @@ def index():
 		if file.filename == '':
 			msg = "No file selected OR incorrect file type (need .txt)"
 
-			return render_template("index.html", noFileErr=msg)
+			return render_template("index-0.html", noFileErr=msg)
 
 		if file and checkFile(file.filename):
 			filename = secure_filename(file.filename)
 
-			return render_template("index.html", 
+			return render_template("index-0.html", 
 				message="File Uploaded!",
 				file_name=filename
 			)
 
-	return render_template("index.html", )
+	return render_template("index-0.html", )
 
 
 # ***** CHECK THE 2nd COMMENT & MAKE SURE *****
