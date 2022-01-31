@@ -147,3 +147,4 @@ data/bbc-summary-data/
 data/bbc.train
 data/bbc.validation
 data/bbc.zip
+test.txt
