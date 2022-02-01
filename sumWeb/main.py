@@ -16,6 +16,8 @@ app = Flask(__name__, instance_relative_config=True)
 
 app.secret_key = os.urandom(12)
 
+# TODO: This should be done locally using javascript.
+# TODO: render_template is called 3 times. This can be minimized
 @app.route('/', methods = ['GET', 'POST'])
 def index():
 	if request.method=='POST':
