@@ -15,9 +15,13 @@ const link_template = document.createElement("a");
 
 link_template.classList.add("nav")
 
+// Template an available model
+const available_model_template = document.createElement("option");
+
 
 // Get DOM elements needed to detect text editing and summary
 const article_button_container = document.querySelector('.article-button-container');
+const summary_button_container = document.querySelector('.summary-button-container');
 const copy_summary_buttton = document.querySelector('.js-copy-summary');
 const edit_text_toggle = document.querySelector('.js-edit-text');
 const remove_text_button = document.querySelector('.js-remove-text');
@@ -36,6 +40,9 @@ const file_input = document.getElementById('file-input')
 // Get DOM elements related to showing history
 const history_button_container = document.querySelector('.history-button-container');
 const history_more = document.querySelector('.js-more-history');
+
+// Get model select DOM elements
+const available_models = document.querySelector('.available-models');
 
 // Regex vars
 let multinewline = /\n+/g;

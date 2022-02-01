@@ -2,49 +2,29 @@
 Ideas:
 	- If file empty & errmsg showing do nothing? (i.e don't refresh)
 '''
+import re
 import os
-
-from flask import Flask, render_template, flash, request, redirect, url_for
-
-from werkzeug.utils import secure_filename
+import json
+import requests
+from flask import Flask, render_template
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
 
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
-
 app.secret_key = os.urandom(12)
 
-# TODO: This should be done locally using javascript.
-# TODO: render_template is called 3 times. This can be minimized
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/', methods = ['GET'])
 def index():
-	if request.method=='POST':
-		# Quick & dirty file upload
-		file = request.files["txtFile"]
+	return render_template("index-0.html")
 
-		if file.filename == '':
-			msg = "No file selected OR incorrect file type (need .txt)"
-
-			return render_template("index-0.html", noFileErr=msg)
-
-		if file and checkFile(file.filename):
-			filename = secure_filename(file.filename)
-
-			return render_template("index-0.html", 
-				message="File Uploaded!",
-				file_name=filename
-			)
-
-	return render_template("index-0.html", )
-
-
-# ***** CHECK THE 2nd COMMENT & MAKE SURE *****
-# Taken from: https://flask.palletsprojects.com/en/2.0.x/patterns/fileuploads/
-# I don't think this is needed as the HTML tag requires it to be .txt
-def checkFile(file):
-	return '.' in file and file.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+@app.route("/v1/models", methods = ['GET'])
+def get_models():
+	# TODO: do not hardcode urls
+	url = "https://storage.googleapis.com/sum-exported/models.config"
+	models = re.findall(r"name: '(.*?)'", requests.get(url).text)
+	return {"models": models}
 
 if __name__ == "__main__":
     app.run()

@@ -81,6 +81,7 @@ function showArticle(article, edit=false) {
     }
 
     cleanupButtons(article_button_container);
+    cleanupButtons(summary_button_container);
 }
 
 function showArticles() {

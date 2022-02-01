@@ -7,3 +7,6 @@ showArticle((init_article) ? init_article : current_id);
 
 // On page load, show summary history
 showHistory()
+
+// On page load, get models avaiable
+getModels()
