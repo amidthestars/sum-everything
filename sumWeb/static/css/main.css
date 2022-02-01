@@ -4,7 +4,7 @@
 
 ::selection {
     background: #E9D8FD;
-color:#202684;
+    color:#202684;
 
     /* WebKit/Blink Browsers */
 }
@@ -47,6 +47,20 @@ a:hover {
 }
 
 textarea {
+    color: inherit;
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+select {
+    color: inherit;
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+div {
     color: inherit;
     background-color: inherit;
     font-family: inherit;
