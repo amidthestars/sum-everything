@@ -38,16 +38,15 @@
             <div id='article' class="max-w-fit leading-loose tracking-tight">
                 <div class="grid grid-cols-2 my-12">
                     <h1 class="font-bold">Article</h1>
-                    <div class="text-right grid grid-cols-4 gap-2 lg:gap-4">
-                        <hidden></hidden>
+                    <div class="article-button-container text-right grid grid-cols-5 gap-2 lg:gap-4">
+                        <button class="js-new-text hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow py-2 fas fa-plus"></button>
+                        <button class="js-remove-text hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow py-2 fas fa-trash"></button>
                         <button class="js-edit-text hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow py-2 fas fa-pen-nib"></button>
                         <button class="js-copy-file hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow py-2 fas fa-upload"></button>
-                        <form id="file-input-form" method="post" enctype=multipart/form-data class="hidden">
-                            <input id="file-input" type="file" name="txtFile" name="txtFile" accept="txt">
-                        </form>
+                        <input type="file" accept=".txt" class="hidden" id="file-input">
                         <button class="hover:bg-gray-400 font-semibold border border-gray-400 rounded shadow py-2 fas fa-chevron-right"></button>
-                        <p class="mb-8" id="input-text"></p>
                     </div>
+                    <p class="mb-8" id="input-text"></p>
                 </div>
                 {% if noFileErr is defined %}
                     <p id="input-text" class="mb-8">{{noFileErr}}</p>
@@ -104,7 +103,6 @@
                 localStorage.setItem('theme', 'light');
                 theme = 'light';
             }
-
             return theme;
         }
         
@@ -113,17 +111,13 @@
             if (theme == 'dark') {
                 localStorage.setItem('theme', 'dark');
                 dark_mode_toggle.innerHTML = "☀️";
-                body.classList.remove('text-gray-700');
-                body.classList.add('text-gray-300');
-                body.classList.remove('bg-gray-100');
-                body.classList.add('bg-gray-900');
+                body.classList.replace('text-gray-700', 'text-gray-300');
+                body.classList.replace('bg-gray-100', 'bg-gray-900');
             } else if (theme == 'light') {
                 localStorage.setItem('theme', 'light');
                 dark_mode_toggle.innerHTML = "🌙";
-                body.classList.remove('text-gray-300');
-                body.classList.add('text-gray-700');
-                body.classList.remove('bg-gray-900');
-                body.classList.add('bg-gray-100');
+                body.classList.replace('text-gray-300', 'text-gray-700');
+                body.classList.replace('bg-gray-900', 'bg-gray-100');
             } else {
                 console.log("Not a valid theme.")
             }
@@ -157,21 +151,49 @@
         input_template.classList.add('p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'focus:border-gray-500');
 
         // Get DOM elements needed to detect text editing and summary
+        const article_button_container = document.querySelector('.article-button-container');
         const copy_summary_buttton = document.querySelector('.js-copy-summary');
         const edit_text_toggle = document.querySelector('.js-edit-text');
+        const remove_text_button = document.querySelector('.js-remove-text');
+        const new_text_button = document.querySelector('.js-new-text');
         const article_area = document.getElementById("article");
         const summary_text = document.getElementById("summary-text");
         let multinewline = /\n+/g;
+        let numcol = /grid-cols-\d/g;
+
+        function matchClass(pattern, element) {
+            element.classList.forEach(name => {
+                console.log(name)
+                console.log(pattern.test(name))
+                if (pattern.test(name)) {
+                    return name
+                }
+            });
+        }
+
+        function visibleChildren(element) {
+            let num_visible = 0
+            console.log(element.childNodes)
+            element.childNodes.forEach(item => {
+                if (item.nodeType != Node.TEXT_NODE && !item.classList.contains("hidden")) {
+                    num_visible += 1;
+                }
+            });
+            return num_visible
+        }
 
         // Function gets a list of unique ids from localstorage
-        function getArticles() {
+        function getArticles(most_recent = false) {
             // articles is a list of unique identifiers
             let articles = localStorage.getItem('articles');
-            if (articles != null) {
+            if (articles != null && articles != "[]") {
                 articles = JSON.parse(articles);
-                console.log(articles)
                 articles.sort();
-                return articles
+                if (most_recent) {
+                    return articles[articles.length - 1]
+                } else {
+                    return articles
+                }
             }
             return null
         }
@@ -187,14 +209,27 @@
 
         function setArticle(article, text) {
             let articles = getArticles()
-            if (articles == null ){
+            if (articles == null) {
                 articles = [article]
-            } else if  (!articles.contains(article)) {
-                articles.append(article)
+            } else if  (!articles.includes(article)) {
+                articles.push(article)
             }
-            let [_, summary] = getArticle(current_id);
-            localStorage.setItem(current_id, JSON.stringify([text, summary]))
+            let [_, summary] = getArticle(article);
+            localStorage.setItem(article, JSON.stringify([text, summary]))
             localStorage.setItem("articles", JSON.stringify(articles))
+            showArticle(article);
+        }
+
+        function removeArticle(article) {
+            let articles = getArticles()
+            var index = articles.indexOf(article);
+            if (index !== -1) {
+                articles.splice(index, 1);
+            }
+            localStorage.removeItem(article)
+            localStorage.setItem("articles", JSON.stringify(articles))
+            article = getArticles(most_recent=true)
+            showArticle((article) ? article : String(+ new Date()));
         }
 
         // Function checks unique id in localstorage and updates the article field accordingly
@@ -206,18 +241,26 @@
             if (text == null || edit == true) {
                 temp_element = input_template;
                 temp_element.value = text;
-                edit_text_toggle.classList.remove("fa-pen-nib");
-                edit_text_toggle.classList.add("fa-save");
+                edit_text_toggle.classList.replace("fa-pen-nib", "fa-save");
             } else {
                 temp_element = text_template;
                 text_template.innerHTML = text.replaceAll(multinewline, "<br><br>");
-                edit_text_toggle.classList.remove("fa-save");
-                edit_text_toggle.classList.add("fa-pen-nib");
+                edit_text_toggle.classList.replace("fa-save", "fa-pen-nib");
             }
             input_text.remove()
             temp_element.id = "input-text";
             article_area.append(temp_element);
             current_id = article;
+
+            // a bit of buton cleanup
+            if (getArticles() == null) {
+                new_text_button.classList.add("hidden")
+                remove_text_button.classList.add("hidden")
+            }
+
+            console.log(matchClass(numcol, article_button_container))
+            article_button_container.classList.remove(matchClass(numcol, article_button_container));
+            article_button_container.classList.add(`grid-cols-${visibleChildren(article_button_container)}`);
         }
 
         function showSummary(summary) {
@@ -231,12 +274,8 @@
         }
 
         // On page load, check if there are stored articles. If not, load empty, if so, load omst recent
-        let init_articles = getArticles()
-        if (init_articles == null) {
-            showArticle(current_id);
-        } else {
-            showArticle(init_articles[init_articles.length - 1]);
-        }
+        let init_article = getArticles(most_recent=true)
+        showArticle((init_article) ? init_article : current_id);
 
         // Event trigger for editing/saving text
         edit_text_toggle.addEventListener('click', () => {
@@ -249,6 +288,13 @@
             }
         });
 
+        //Event trigger for starting new article
+
+        //Event trigger for removing current article
+        remove_text_button.addEventListener('click', () => {
+            removeArticle(current_id);
+        });
+
         //Copy trigger
         copy_summary_buttton.addEventListener('click', () => {
             navigator.clipboard.writeText(summary_text.innerHTML);
@@ -257,34 +303,22 @@
     </script>
 
     <script>
-        function readTextFile(file) {
-            var rawFile = new XMLHttpRequest();
-            rawFile.open("GET", file, false);
-            rawFile.onreadystatechange = function ()
-            {
-                if(rawFile.readyState === 4)
-                {
-                    if(rawFile.status === 200 || rawFile.status == 0)
-                    {
-                        var allText = rawFile.responseText;
-                        alert(allText);
-                    }
-                }
-            }
-            rawFile.send(null);
-        }
-
+        // Open text files
         const upload_file_buttton = document.querySelector('.js-copy-file');
         const file_input = document.getElementById('file-input')
-
+        
         upload_file_buttton.addEventListener('click', () => {
             file_input.click();
-            console.log(file_input.value);
         });
 
-        file_input.onchange = function() {
-            document.getElementById("file-input-form").submit();
-        };
+        file_input.addEventListener('change', function() {
+            var fr = new FileReader();
+            fr.onload = function(){
+                // Create new article
+                setArticle(String(+ new Date()), fr.result);
+            }
+            fr.readAsText(this.files[0]);
+        })
     </script>
 </body>
 
