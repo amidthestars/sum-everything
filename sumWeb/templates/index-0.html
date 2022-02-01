@@ -13,25 +13,25 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
-    <link href= "{{ url_for('static',filename='styles/main.css') }}" rel= "stylesheet" type= "text/css">
+    <link href= "{{ url_for('static',filename='css/main.css') }}" rel= "stylesheet" type= "text/css">
+    <link rel="stylesheet" type="text/css" href="https://csshake.surge.sh/csshake.min.css">
 
 </head>
 
 <body class="bg-gray-100 text-gray-700 font-sans quicksand">
-
     <div class="p-6 sm:p-10 lg:p-16 flex flex-wrap">
-
+        
         <div class="w-full lg:w-1/3 lg:pr-32 order-1 lg:order-1 truncate">
             <div class="max-w-lg lg:float-right lg:text-right leading-loose tracking-tight lg:sticky lg:top-0">
                 <p class="font-bold mt-10 mb-6 lg:my-12">Previous Summaries</p>
 
-                <ul class="flex-fit justify-between flex-col">
+                <ul class="history-button-container flex-fit justify-between flex-col">
                     <!--li class may nevr be longer than 26 chars-->
                     <li><a href="#" class="nav">A diam sollicitudin tempor id eue</a></li>
                     <li><a href="#" class="nav">Lectus vestibulum mattis ullamcorper velit sed ullamcorper</a></li>
                     <li><a href="#" class="nav">Pulvinar etiam non quam lacus suspendisse faucibus</a></li>
                 </ul>
-                <a href="#" class="normal font-bold hover:font-bold">more...</a>
+                <a class="js-more-history hidden normal font-bold hover:font-bold">more...</a>
             </div>
         </div>
         <div class="w-full lg:w-2/3 order-2 lg:order-2">
@@ -91,235 +91,14 @@
         <button class="focus:outline-none font-bold">ꜱᴜᴍᴍɪᴛ.ᴀɪ</button>
     </div>
 
-    <script>
-        // Get DOM elements related to theme toggling
-        const dark_mode_toggle = document.querySelector('.js-change-theme');
-        const body = document.querySelector('body');
+    <script src="{{ url_for('static',filename='js/vars.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/helpers.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/text.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/history.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/files.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/init.js') }}"></script>
 
-        // Define a function that returns the theme defined by localStorage
-        function getTheme() {
-            let theme = localStorage.getItem('theme');
-            if (theme == null) {
-                localStorage.setItem('theme', 'light');
-                theme = 'light';
-            }
-            return theme;
-        }
-        
-        // Define a function that sets the theme
-        function setTheme(theme) {
-            if (theme == 'dark') {
-                localStorage.setItem('theme', 'dark');
-                dark_mode_toggle.innerHTML = "☀️";
-                body.classList.replace('text-gray-700', 'text-gray-300');
-                body.classList.replace('bg-gray-100', 'bg-gray-900');
-            } else if (theme == 'light') {
-                localStorage.setItem('theme', 'light');
-                dark_mode_toggle.innerHTML = "🌙";
-                body.classList.replace('text-gray-300', 'text-gray-700');
-                body.classList.replace('bg-gray-900', 'bg-gray-100');
-            } else {
-                console.log("Not a valid theme.")
-            }
-        }
-
-        // At initial load, set theme to last set
-        setTheme(getTheme());
-
-        // When button is clicked, set theme to the inverse
-        dark_mode_toggle.addEventListener('click', () => {
-            if (getTheme() == 'light') {
-                setTheme('dark');
-            } else if (getTheme() == 'dark') {
-                setTheme('light');
-            } else {
-                console.log("Not a valid theme.")
-            }
-        });
-    </script>
-
-
-    <script>
-        // Template article field and textbox
-        let current_id = String(+ new Date())
-        const text_template = document.createElement("p");
-        const input_template = document.createElement("textarea");
-
-        input_template.rows = 6;
-        input_template.placeholder = "Type or paste something...";
-        text_template.classList.add('mb-8');
-        input_template.classList.add('p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'focus:border-gray-500');
-
-        // Get DOM elements needed to detect text editing and summary
-        const article_button_container = document.querySelector('.article-button-container');
-        const copy_summary_buttton = document.querySelector('.js-copy-summary');
-        const edit_text_toggle = document.querySelector('.js-edit-text');
-        const remove_text_button = document.querySelector('.js-remove-text');
-        const new_text_button = document.querySelector('.js-new-text');
-        const article_area = document.getElementById("article");
-        const summary_text = document.getElementById("summary-text");
-        let multinewline = /\n+/g;
-        let numcol = /grid-cols-\d/g;
-
-        function matchClass(pattern, element) {
-            element.classList.forEach(name => {
-                console.log(name)
-                console.log(pattern.test(name))
-                if (pattern.test(name)) {
-                    return name
-                }
-            });
-        }
-
-        function visibleChildren(element) {
-            let num_visible = 0
-            console.log(element.childNodes)
-            element.childNodes.forEach(item => {
-                if (item.nodeType != Node.TEXT_NODE && !item.classList.contains("hidden")) {
-                    num_visible += 1;
-                }
-            });
-            return num_visible
-        }
-
-        // Function gets a list of unique ids from localstorage
-        function getArticles(most_recent = false) {
-            // articles is a list of unique identifiers
-            let articles = localStorage.getItem('articles');
-            if (articles != null && articles != "[]") {
-                articles = JSON.parse(articles);
-                articles.sort();
-                if (most_recent) {
-                    return articles[articles.length - 1]
-                } else {
-                    return articles
-                }
-            }
-            return null
-        }
-
-        function getArticle(article) {
-            let stored_text = localStorage.getItem(article);
-            if (stored_text == null) {
-                return [null, null]
-            } else {
-                return JSON.parse(stored_text)
-            }
-        }
-
-        function setArticle(article, text) {
-            let articles = getArticles()
-            if (articles == null) {
-                articles = [article]
-            } else if  (!articles.includes(article)) {
-                articles.push(article)
-            }
-            let [_, summary] = getArticle(article);
-            localStorage.setItem(article, JSON.stringify([text, summary]))
-            localStorage.setItem("articles", JSON.stringify(articles))
-            showArticle(article);
-        }
-
-        function removeArticle(article) {
-            let articles = getArticles()
-            var index = articles.indexOf(article);
-            if (index !== -1) {
-                articles.splice(index, 1);
-            }
-            localStorage.removeItem(article)
-            localStorage.setItem("articles", JSON.stringify(articles))
-            article = getArticles(most_recent=true)
-            showArticle((article) ? article : String(+ new Date()));
-        }
-
-        // Function checks unique id in localstorage and updates the article field accordingly
-        function showArticle(article, edit=false) {
-            // article is a unique identifier
-            let input_text = document.getElementById("input-text");
-            let [text, summary] = getArticle(article);
-            showSummary(summary)
-            if (text == null || edit == true) {
-                temp_element = input_template;
-                temp_element.value = text;
-                edit_text_toggle.classList.replace("fa-pen-nib", "fa-save");
-            } else {
-                temp_element = text_template;
-                text_template.innerHTML = text.replaceAll(multinewline, "<br><br>");
-                edit_text_toggle.classList.replace("fa-save", "fa-pen-nib");
-            }
-            input_text.remove()
-            temp_element.id = "input-text";
-            article_area.append(temp_element);
-            current_id = article;
-
-            // a bit of buton cleanup
-            if (getArticles() == null) {
-                new_text_button.classList.add("hidden")
-                remove_text_button.classList.add("hidden")
-            }
-
-            console.log(matchClass(numcol, article_button_container))
-            article_button_container.classList.remove(matchClass(numcol, article_button_container));
-            article_button_container.classList.add(`grid-cols-${visibleChildren(article_button_container)}`);
-        }
-
-        function showSummary(summary) {
-            if (summary == null) {
-                summary_text.innerHTML = "🤔 I don't think I've done this one yet!";
-                copy_summary_buttton.classList.add("hidden");
-            } else {
-                summary_text.innerHTML = summary;
-                copy_summary_buttton.classList.remove("hidden");
-            }
-        }
-
-        // On page load, check if there are stored articles. If not, load empty, if so, load omst recent
-        let init_article = getArticles(most_recent=true)
-        showArticle((init_article) ? init_article : current_id);
-
-        // Event trigger for editing/saving text
-        edit_text_toggle.addEventListener('click', () => {
-            if (edit_text_toggle.classList.contains("fa-save")) {
-                let input_text = document.getElementById("input-text");
-                setArticle(current_id, input_text.value)
-                showArticle(current_id, edit=false);
-            } else if (edit_text_toggle.classList.contains("fa-pen-nib")) {
-                showArticle(current_id, edit=true);
-            }
-        });
-
-        //Event trigger for starting new article
-
-        //Event trigger for removing current article
-        remove_text_button.addEventListener('click', () => {
-            removeArticle(current_id);
-        });
-
-        //Copy trigger
-        copy_summary_buttton.addEventListener('click', () => {
-            navigator.clipboard.writeText(summary_text.innerHTML);
-        });
-
-    </script>
-
-    <script>
-        // Open text files
-        const upload_file_buttton = document.querySelector('.js-copy-file');
-        const file_input = document.getElementById('file-input')
-        
-        upload_file_buttton.addEventListener('click', () => {
-            file_input.click();
-        });
-
-        file_input.addEventListener('change', function() {
-            var fr = new FileReader();
-            fr.onload = function(){
-                // Create new article
-                setArticle(String(+ new Date()), fr.result);
-            }
-            fr.readAsText(this.files[0]);
-        })
-    </script>
 </body>
 
 </html>
