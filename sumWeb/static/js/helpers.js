@@ -1,8 +1,8 @@
-function redShake(element, seconds=500) {
+function redShake(element, shake_style="shake-horizontal", seconds=500) {
     element.classList.replace("border-gray-400", "border-red-400")
-    element.classList.add("shake")
+    element.classList.add(shake_style, "mb-2.5")
     setTimeout(function () {
-        element.classList.remove("shake")
+        element.classList.remove(shake_style, "mb-2.5")
         element.classList.replace("border-red-400", "border-gray-400")
     }, seconds);
 }
