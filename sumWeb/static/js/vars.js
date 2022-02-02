@@ -4,10 +4,10 @@ const text_template = document.createElement("p");
 const input_template = document.createElement("textarea");
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-input_template.rows = 6;
+input_template.rows = 10;
 input_template.placeholder = "Type or paste something...";
 text_template.classList.add('mb-8');
-input_template.classList.add('p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'shake-constant');
+input_template.classList.add('inherit', 'p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'shake-constant');
 
 // Template a history entry
 const history_template = document.createElement("li");
@@ -43,6 +43,9 @@ const history_more = document.querySelector('.js-more-history');
 
 // Get model select DOM elements
 const available_models = document.querySelector('.available-models');
+
+// Get Alert DOM elements
+const article_alert = document.getElementById("article-alert");
 
 // Regex vars
 let multinewline = /\n+/g;

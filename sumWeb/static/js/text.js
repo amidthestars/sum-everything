@@ -84,10 +84,6 @@ function showArticle(article, edit=false) {
     cleanupButtons(summary_button_container);
 }
 
-function showArticles() {
-
-}
-
 function showSummary(summary) {
     if (summary == null) {
         summary_text.innerHTML = "🤔 I don't think I've done this one yet!";
@@ -104,7 +100,8 @@ function showSummary(summary) {
 edit_text_toggle.addEventListener('click', () => {
     if (edit_text_toggle.classList.contains("fa-save")) {
         let input_text = document.getElementById("input-text");
-        if (input_text.value.length < 20) {
+        if (input_text.value.length < 20 || input_text.value.length > 2000) {
+            showAlert(article_alert, "Input length cannot be less than 20 or more than 2000 characters", "red", "fa-exclamation-triangle")
             redShake(input_text)
         } else {
             setArticle(current_id, input_text.value)

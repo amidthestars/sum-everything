@@ -46,21 +46,7 @@ a:hover {
     transition: color 150ms ease-in-out;
 }
 
-textarea {
-    color: inherit;
-    background-color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-}
-
-select {
-    color: inherit;
-    background-color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-}
-
-div {
+.inherit {
     color: inherit;
     background-color: inherit;
     font-family: inherit;
