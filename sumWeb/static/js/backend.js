@@ -16,3 +16,27 @@ function getModels() {
         });
       })
 }
+
+function getSummary(input) {
+    let options = {
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json;charset=utf-8"
+        },
+        "body": JSON.stringify(
+            {
+                "model": available_models.value,
+                "input": input
+            }
+        )
+    };
+
+    return fetch("/v1/query", options)
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        let {output} = data;
+        return output;
+    });
+}

@@ -23,6 +23,7 @@ const available_model_template = document.createElement("option");
 const article_button_container = document.querySelector('.article-button-container');
 const summary_button_container = document.querySelector('.summary-button-container');
 const copy_summary_buttton = document.querySelector('.js-copy-summary');
+const get_summary_button = document.querySelector('.js-get-summary');
 const edit_text_toggle = document.querySelector('.js-edit-text');
 const remove_text_button = document.querySelector('.js-remove-text');
 const new_text_button = document.querySelector('.js-new-text');

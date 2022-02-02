@@ -126,3 +126,8 @@ remove_text_button.addEventListener('click', () => {
 copy_summary_buttton.addEventListener('click', () => {
     navigator.clipboard.writeText(summary_text.innerHTML);
 });
+
+get_summary_button.addEventListener('click', () => {
+    let input_text = document.getElementById("input-text");
+    getSummary(input_text.textContent).then(showSummary);
+})
