@@ -10,6 +10,7 @@ import importlib.util
 import logging as py_logging
 import tensorflow.compat.v1 as tf
 from contextlib import contextmanager
+py_logging.getLogger("tensorflow").setLevel(py_logging.INFO)
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Set up logging
@@ -39,8 +40,8 @@ parser.add_argument('-steps', type=int, default=50000,
                     help='Number of steps to train for')
 parser.add_argument('-model_size', type=str, default="small", choices=["small", "t5.1.1.small", "base", "large", "3B", "11B"],
                     help='Model size. Small is generally reccomended.')
-parser.add_argument('-epoch_size', type=int, default=500,
-                    help='Iterations per "epoch"')
+parser.add_argument('-evaluate_after', type=int, default=500,
+                    help='Calcuates the loss after this value')
 parser.add_argument('-save_after', type=int, default=2500,
                     help='How many steps before saving a checkpoint')
 parser.add_argument('-models_dir', type=str, default="models",
