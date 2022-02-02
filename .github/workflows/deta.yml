@@ -1,8 +1,9 @@
 name: Deploy to Deta
 on: 
-  workflow_dispatch:
   push:
-    branches: [ web_page ]
+    branches:
+      - web_page
+  workflow_dispatch:
 
 jobs:
   deploy-web:
