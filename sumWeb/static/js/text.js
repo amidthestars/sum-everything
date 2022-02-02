@@ -23,17 +23,28 @@ function getArticle(article) {
     }
 }
 
-function setArticle(article, text) {
+function setArticle(id, text) {
     let articles = getArticles()
     if (articles == null) {
-        articles = [article]
-    } else if  (!articles.includes(article)) {
-        articles.push(article)
+        articles = [id]
+    } else if  (!articles.includes(id)) {
+        articles.push(id)
     }
-    let [_, summary] = getArticle(article);
-    localStorage.setItem(article, JSON.stringify([text, summary]))
+    let [_, summary] = getArticle(id);
+    localStorage.setItem(id, JSON.stringify([text, summary]))
     localStorage.setItem("articles", JSON.stringify(articles))
-    showArticle(article);
+    showArticle(id);
+}
+
+function setSummary(id, summary) {
+    let articles = getArticles()
+    if (articles == null) {
+        console.log("🤯 Somehow, you made a summary that has no equivalent article...")
+        return null
+    }
+    let [text, _] = getArticle(id);
+    localStorage.setItem(id, JSON.stringify([text, summary]))
+    showArticle(id);
 }
 
 function removeArticle(article) {
@@ -128,6 +139,8 @@ copy_summary_buttton.addEventListener('click', () => {
 });
 
 get_summary_button.addEventListener('click', () => {
-    let input_text = document.getElementById("input-text");
-    getSummary(input_text.textContent).then(showSummary);
+    let [text, _] = getArticle(current_id);
+    getSummary(text).then(result => {
+        setSummary(current_id, result)
+    });
 })

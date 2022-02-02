@@ -4,9 +4,14 @@ Ideas:
 '''
 import re
 import os
-import json
 import requests
+import httpimport
 from flask import Flask, render_template, request
+
+# Dynamically import from main branch
+cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src/helpers.py'
+with httpimport.remote_repo(["clean", "parse"], cleaner_module):
+    import clean, parse
 
 class ModelAPI():
     def __init__(self, url: str, port: int, model: str=None):

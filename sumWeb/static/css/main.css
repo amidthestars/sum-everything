@@ -46,6 +46,13 @@ a:hover {
     transition: color 150ms ease-in-out;
 }
 
+div {
+    color: inherit;
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
 .inherit {
     color: inherit;
     background-color: inherit;
