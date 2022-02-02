@@ -7,8 +7,6 @@ upload_file_buttton.addEventListener('click', () => {
 
 // Read file data
 file_input.addEventListener('change', function() {
-    // Show added file properties
-    console.log(file_input.files)
 
     var fr = new FileReader();
     fr.onload = function(){
@@ -19,7 +17,6 @@ file_input.addEventListener('change', function() {
         const sentences = fr.result.split('.').map(function (line) {
             return line.replace('\n', '');
         })
-        console.log(sentences);
 
         if (sentences.length < 20 || sentences.length > 1000) {
             alertStr = "File cannot have less than 20 sentences or more than 1000. Current #: " + sentences.length.toString();
