@@ -39,6 +39,8 @@ parser.add_argument('-steps', type=int, default=50000,
                     help='Number of steps to train for')
 parser.add_argument('-model_size', type=str, default="small", choices=["small", "t5.1.1.small", "base", "large", "3B", "11B"],
                     help='Model size. Small is generally reccomended.')
+parser.add_argument('-epoch_size', type=int, default=500,
+                    help='Iterations per "epoch"')
 parser.add_argument('-save_after', type=int, default=2500,
                     help='How many steps before saving a checkpoint')
 parser.add_argument('-models_dir', type=str, default="models",
@@ -131,7 +133,7 @@ if args.tpu:
         learning_rate_schedule=0.001,
         save_checkpoints_steps=args.save_after,
         keep_checkpoint_max=keep_checkpoint_max,
-        iterations_per_loop=500,
+        iterations_per_loop=args.epoch_size,
     )
 elif args.gpus:
     model = t5.models.MtfModel(
@@ -145,7 +147,7 @@ elif args.gpus:
         learning_rate_schedule=0.001,
         save_checkpoints_steps=args.save_after,
         keep_checkpoint_max=keep_checkpoint_max,
-        iterations_per_loop=500,
+        iterations_per_loop=args.epoch_size,
     )
 else: raise NotImplementedError("Running with no accelerators is not a supported case.")
         

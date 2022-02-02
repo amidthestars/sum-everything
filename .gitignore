@@ -134,6 +134,7 @@ dmypy.json
 
 # Do not commit raw dataset files
 datasets*
+data/bbc*
 data/cnn*
 data/dailymail*
 data/idt*
