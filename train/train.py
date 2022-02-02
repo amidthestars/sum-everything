@@ -134,7 +134,7 @@ if args.tpu:
         learning_rate_schedule=0.001,
         save_checkpoints_steps=args.save_after,
         keep_checkpoint_max=keep_checkpoint_max,
-        iterations_per_loop=args.epoch_size,
+        iterations_per_loop=args.evaluate_after,
     )
 elif args.gpus:
     model = t5.models.MtfModel(
@@ -148,7 +148,7 @@ elif args.gpus:
         learning_rate_schedule=0.001,
         save_checkpoints_steps=args.save_after,
         keep_checkpoint_max=keep_checkpoint_max,
-        iterations_per_loop=args.epoch_size,
+        iterations_per_loop=args.evaluate_after,
     )
 else: raise NotImplementedError("Running with no accelerators is not a supported case.")
         
