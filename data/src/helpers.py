@@ -80,7 +80,7 @@ alphabets="""ᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸ
 ልጌርዕቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊልጌርዕቿቻኗዘጎጋጕረጠክዐየዒዪነፕሁሀሠሸሃጊ"""
 
 for alphabet in alphabets[1:]:
-    for ind, char in enumerate(alphabet):
+    for ind, char in enumerate(alphabet.strip()):
         try:normalize_chars[char]=alphabets[0][ind]
         except: print(alphabet, len(alphabet), len(alphabets[0]));break
 normalize_chars.update({i:i for i in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'})
@@ -94,7 +94,7 @@ r3=re.compile(r'[\U00003000\U0000205F\U0000202F\U0000200A\U00002000-\U00002009\U
 r4=re.compile(r"([a-z1-9\'\"][\.\?\!\,])([a-z1-9\'\"])", re.IGNORECASE)
 
 def clean(text):
-    text= text.translate(normal_map)#handle special chars from other langs
+    text= text.translate(normal_map) #handle special chars from other langs
     text= re.sub(r2, r"\1\2\2\3\3\3\4", text.strip()) #remove urls, emails, code blocks, custom emojis, non-emoji, punctuation, letters, and phone numbers
     text= re.sub(r3, " ", text.strip()) #handle... interesting spaces
     text= re.sub(r4, r"\1 \2", text.strip())
@@ -104,5 +104,4 @@ def clean(text):
 
 def parse(text):
     text = text.replace("/n", "\n")
-
     return text.lstrip(("-!.,^# ")).strip()
