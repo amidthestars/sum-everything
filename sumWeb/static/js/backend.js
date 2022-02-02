@@ -32,11 +32,10 @@ function getSummary(input) {
     };
 
     return fetch("/v1/query", options)
-    .then(response => {
+    .then(response => { 
         return response.json();
     })
     .then(data => {
-        let {output} = data;
-        return output;
+        return data;
     });
 }

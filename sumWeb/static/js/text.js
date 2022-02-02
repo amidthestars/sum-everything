@@ -36,13 +36,12 @@ function setArticle(id, text) {
     showArticle(id);
 }
 
-function setSummary(id, summary) {
+function setSummary(id, text, summary) {
     let articles = getArticles()
     if (articles == null) {
         console.log("🤯 Somehow, you made a summary that has no equivalent article...")
         return null
     }
-    let [text, _] = getArticle(id);
     localStorage.setItem(id, JSON.stringify([text, summary]))
     showArticle(id);
 }
@@ -83,8 +82,10 @@ function showArticle(article, edit=false) {
     // a bit of buton cleanup
     new_text_button.classList.remove("hidden")
     remove_text_button.classList.remove("hidden")
+    get_summary_button.classList.remove("hidden")
     if (edit == true) {
         new_text_button.classList.add("hidden")
+        get_summary_button.classList.add("hidden")
     }
     if (getArticles() == null) {
         new_text_button.classList.add("hidden")
@@ -111,8 +112,8 @@ function showSummary(summary) {
 edit_text_toggle.addEventListener('click', () => {
     if (edit_text_toggle.classList.contains("fa-save")) {
         let input_text = document.getElementById("input-text");
-        if (input_text.value.length < 20 || input_text.value.length > 2000) {
-            showAlert(article_alert, "Input length cannot be less than 20 or more than 2000 characters", "red", "fa-exclamation-triangle")
+        if (input_text.value.length < 20 || input_text.value.length > 5000) {
+            showAlert(article_alert, "Input length cannot be less than 20 or more than 5000 characters", "red", "fa-exclamation-triangle")
             redShake(input_text)
         } else {
             setArticle(current_id, input_text.value)
@@ -141,6 +142,7 @@ copy_summary_buttton.addEventListener('click', () => {
 get_summary_button.addEventListener('click', () => {
     let [text, _] = getArticle(current_id);
     getSummary(text).then(result => {
-        setSummary(current_id, result)
+        let [text, summary] = [result['inputs'][0], result['outputs'][0]]
+        setSummary(current_id, text, summary)
     });
 })

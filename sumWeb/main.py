@@ -6,12 +6,14 @@ import re
 import os
 import requests
 import httpimport
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 
 # Dynamically import from main branch
-cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src/helpers.py'
-with httpimport.remote_repo(["clean", "parse"], cleaner_module):
-    import clean, parse
+cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src'
+with httpimport.remote_repo(["helpers"], cleaner_module):
+    from helpers import clean, parse
+
+print(clean("ree\n this is not good"))
 
 class ModelAPI():
     def __init__(self, url: str, port: int, model: str=None):
@@ -21,10 +23,24 @@ class ModelAPI():
     def set_model(self, model: str):
         self.model = model
 
-    def query(self, input: str, batches: int) -> dict:
-        data = {"inputs": [input]*batches}
+    def query(self, inputs: str, batches: int) -> dict:
+        data = {"inputs": [clean(inputs)]*batches}
         response = requests.post(f"{self.url}{self.model}:predict", json=data)
-        return response.json()["outputs"]
+        if response.status_code == 200:
+            # Response cleanup
+            response = response.json()['outputs']
+            print(response)
+            for label in response:
+                response[label] = [parse(entry) for entry in response[label]]
+
+            # Prepare flask return
+            ret = make_response(response, 200)
+            ret.mimetype = "application/json"
+            return ret
+        else:
+            ret = make_response(f"Model server returned {response.status.code}\nInfo: {response.content}",response.status_code)
+            ret.mimetype = "text/plain"
+            return ret
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
@@ -50,7 +66,7 @@ def query():
     data = request.json
     model_api.set_model(data["model"])
     response = model_api.query(data["input"], 1)
-    return {"output": response["outputs"][0]}
+    return response
 
 if __name__ == "__main__":
     app.run()
