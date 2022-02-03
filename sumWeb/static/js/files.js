@@ -12,20 +12,25 @@ file_input.addEventListener('change', function() {
     fr.onload = function(){
         console.log("Got file!");
 
-        // Make sure the # of sentences is > 20 & < 1000
-        // NOTE: Splitting by period causes problems in cases like "Analyst John L. Allen said."
-        const sentences = fr.result.split('.').map(function (line) {
-            return line.replace('\n', '');
-        })
+        resLen = fr.result.length
 
-        if (sentences.length < 20 || sentences.length > 1000) {
-            alertStr = "File cannot have less than 20 sentences or more than 1000. Current #: " + sentences.length.toString();
+        // Check proper file length
+        if (resLen < 20 || resLen > 5000) {
+            alertStr = "Input length cannot be less than 20 or more than 5000 characters. Current length: " + fr.result.length;
             showAlert(article_alert, alertStr, "red", "fa-exclamation-triangle")
         }
         else{
-            // Create new article
-            setArticle(String(+ new Date()), fr.result);
+            // Make sure this is NOT a binary file
+            if (fr.result.match(/[^\u0000-\u007f]/)){
+                showAlert(article_alert, "File must be plain text!", "red", "fa-exclamation-triangle")
+            }
+            else{
+                // Create new article
+                setArticle(String(+ new Date()), fr.result);
+            }
         }
     }
+
+    // Reads as plain text
     fr.readAsText(this.files[0]);
 })

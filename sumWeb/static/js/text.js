@@ -112,8 +112,15 @@ function showSummary(summary) {
 edit_text_toggle.addEventListener('click', () => {
     if (edit_text_toggle.classList.contains("fa-save")) {
         let input_text = document.getElementById("input-text");
+
+        // Check that text is proper length
         if (input_text.value.length < 20 || input_text.value.length > 5000) {
             showAlert(article_alert, "Input length cannot be less than 20 or more than 5000 characters", "red", "fa-exclamation-triangle")
+            redShake(input_text)
+        }
+        // Check that text is not binary
+        else if (input_text.value.match(/[^\u0000-\u007f]/)){ 
+            showAlert(article_alert, "Input must be plain text!", "red", "fa-exclamation-triangle")
             redShake(input_text)
         } else {
             setArticle(current_id, input_text.value)
@@ -142,7 +149,13 @@ copy_summary_buttton.addEventListener('click', () => {
 get_summary_button.addEventListener('click', () => {
     let [text, _] = getArticle(current_id);
     getSummary(text).then(result => {
-        let [text, summary] = [result['inputs'][0], result['outputs'][0]]
-        setSummary(current_id, text, summary)
+        if (result != null) {
+            let [text, summary] = [result['inputs'][0], result['outputs'][0]]
+            setSummary(current_id, text, summary)
+        }
+        else {
+            showAlert(article_alert, "Model could not summarize data.", "red", "fa-exclamation-triangle")
+        }
+        
     });
 })
