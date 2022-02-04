@@ -20,8 +20,21 @@ file_input.addEventListener('change', function() {
             showAlert(article_alert, alertStr, "red", "fa-exclamation-triangle")
         }
         else{
-            // Make sure this is NOT a binary file
-            if (fr.result.match(/[^\u0000-\u007f]/)){
+            // CheckAscii holds array of values not in normal unicode "ascii" area
+            checkAscii = fr.result.match(/[^\u0000-\u007f]/)
+            caLen = checkAscii.length;
+            numNonAsciiVals = caLen;
+
+
+            // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
+            for (let i = 0; i < caLen; i++){
+                if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
+                    checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
+                    numNonAsciiVals -= 1;
+                }
+            }
+
+            if (numNonAsciiVals > 0){
                 showAlert(article_alert, "File must be plain text!", "red", "fa-exclamation-triangle")
             }
             else{

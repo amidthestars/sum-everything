@@ -113,13 +113,26 @@ edit_text_toggle.addEventListener('click', () => {
     if (edit_text_toggle.classList.contains("fa-save")) {
         let input_text = document.getElementById("input-text");
 
+        // CheckAscii holds array of values not in normal unicode "ascii" area
+        checkAscii = input_text.value.match(/[^\u0000-\u007f]/)
+        caLen = checkAscii.length;
+        numNonAsciiVals = caLen;
+
+        // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
+        for (let i = 0; i < caLen; i++){
+            if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
+                checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
+                numNonAsciiVals -= 1;
+            }
+        }
+
         // Check that text is proper length
         if (input_text.value.length < 20 || input_text.value.length > 5000) {
             showAlert(article_alert, "Input length cannot be less than 20 or more than 5000 characters", "red", "fa-exclamation-triangle")
             redShake(input_text)
         }
         // Check that text is not binary
-        else if (input_text.value.match(/[^\u0000-\u007f]/)){ 
+        else if (numNonAsciiVals > 0){ 
             showAlert(article_alert, "Input must be plain text!", "red", "fa-exclamation-triangle")
             redShake(input_text)
         } else {
