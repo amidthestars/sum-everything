@@ -22,16 +22,22 @@ file_input.addEventListener('change', function() {
         else{
             // CheckAscii holds array of values not in normal unicode "ascii" area
             checkAscii = fr.result.match(/[^\u0000-\u007f]/)
-            caLen = checkAscii.length;
-            numNonAsciiVals = caLen;
+
+            if (checkAscii != null){
+                caLen = checkAscii.length;
+                numNonAsciiVals = caLen;
 
 
-            // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
-            for (let i = 0; i < caLen; i++){
-                if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
-                    checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
-                    numNonAsciiVals -= 1;
+                // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
+                for (let i = 0; i < caLen; i++){
+                    if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
+                        checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
+                        numNonAsciiVals -= 1;
+                    }
                 }
+            }
+            else{
+                numNonAsciiVals = 0
             }
 
             if (numNonAsciiVals > 0){

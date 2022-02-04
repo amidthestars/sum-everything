@@ -115,16 +115,21 @@ edit_text_toggle.addEventListener('click', () => {
 
         // CheckAscii holds array of values not in normal unicode "ascii" area
         checkAscii = input_text.value.match(/[^\u0000-\u007f]/)
-        caLen = checkAscii.length;
-        numNonAsciiVals = caLen;
 
-        // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
-        for (let i = 0; i < caLen; i++){
-            if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
-                checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
-                numNonAsciiVals -= 1;
+        if (checkAscii != null){
+            caLen = checkAscii.length;
+            numNonAsciiVals = caLen;
+
+            // If there was a value picked up in checkAscii make sure it isn't unicode \u2018-\u201f
+            for (let i = 0; i < caLen; i++){
+                if (!checkAscii[i].match(/[^\u2018-\u201f]/)){
+                    checkAscii[i] = checkAscii[i].match(/[^\u2018-\u201f]/);
+                    numNonAsciiVals -= 1;
+                }
             }
         }
+        else
+            numNonAsciiVals = 0
 
         // Check that text is proper length
         if (input_text.value.length < 20 || input_text.value.length > 5000) {
