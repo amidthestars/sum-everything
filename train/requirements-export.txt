@@ -1,4 +1,4 @@
 t5
 tensorflow == 2.7.1
-tesorflow-text == 2.7.3
+tensorflow-text == 2.7.3
 google-cloud-storage
