@@ -6,14 +6,13 @@ import re
 import os
 import requests
 import httpimport
+from flask_sock import Sock
 from flask import Flask, render_template, request, make_response
 
 # Dynamically import from main branch
 cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src'
 with httpimport.remote_repo(["helpers"], cleaner_module):
     from helpers import clean, parse
-
-print(clean("ree\n this is not good"))
 
 class ModelAPI():
     def __init__(self, url: str, port: int, model: str=None):
@@ -48,6 +47,7 @@ ALLOWED_EXTENSIONS = {'txt'}
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.urandom(12)
+sock = Sock(app)
 model_api = ModelAPI("155.248.202.186", 3000)
 
 @app.route('/', methods = ['GET'])
@@ -67,6 +67,12 @@ def query():
     model_api.set_model(data["model"])
     response = model_api.query(data["input"], 1)
     return response
+
+@sock.route('/modelapi')
+def echo(request):
+    while True:
+        data = request.receive()
+        request.send(data)
 
 if __name__ == "__main__":
     app.run()

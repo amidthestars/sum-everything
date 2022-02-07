@@ -18,7 +18,6 @@ link_template.classList.add("nav")
 // Template an available model
 const available_model_template = document.createElement("option");
 
-
 // Get DOM elements needed to detect text editing and summary
 const article_button_container = document.querySelector('.article-button-container');
 const summary_button_container = document.querySelector('.summary-button-container');
@@ -47,6 +46,10 @@ const available_models = document.querySelector('.available-models');
 
 // Get Alert DOM elements
 const article_alert = document.getElementById("article-alert");
+
+//open a websocket
+const model_socket = new WebSocket(`ws://${location.host}/modelapi`);
+
 
 // Regex vars
 let multinewline = /\n+/g;

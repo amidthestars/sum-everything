@@ -3,7 +3,7 @@ function getModels() {
     fetch('/v1/models')
     .then((response) => {
         if (response.status != 200){
-            showAlert(article_alert, "Model not responding properly.", "red", "fa-exclamation-triangle");
+            showAlert(article_alert, "Cannot get model data", "red", "fa-exclamation-triangle");
         }
         else{
             return response.json();
@@ -22,7 +22,6 @@ function getModels() {
                 available_models.appendChild(temp_model)
             });
         }
-
       })
 }
 
@@ -49,4 +48,12 @@ function getSummary(input) {
     .then(data => {
         return data;
     });
+}
+
+model_socket.onopen = function() {
+    model_socket.send("Here's some text that the server is urgently awaiting!");
+};
+
+model_socket.onmessage = function (event) {
+    console.log(event.data);
 }

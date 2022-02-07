@@ -128,12 +128,26 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Idea
+.idea*
+*.DS_Store*
+
 # Do not commit raw dataset files
-datasets*
+datasets/*
+data/bbc*
 data/cnn*
+data/dailymail*
 data/idt*
+data/tifu*
 data/hindu_indian_times_guardian_news.zip
 data/scisummnet*
+data/wikiHow*
 train/models*
-train/export*
+train/export/*
 train/test.data
+data/XSUM-EMNLP18-Summary-Data-Original.tar.gz
+data/bbc-summary-data/
+data/bbc.train
+data/bbc.validation
+data/bbc.zip
+test.txt
