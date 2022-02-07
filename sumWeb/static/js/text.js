@@ -177,3 +177,21 @@ get_summary_button.addEventListener('click', () => {
         
     });
 })
+
+//Character count to textarea
+document.addEventListener('keyup', countChars);
+
+function countChars(e) {
+    const input_text = document.getElementById("input-text");
+    var numChars = input_text.value.length;
+    var curr = document.getElementById("current");
+    var maxChars = document.getElementById("maximum");
+
+    curr.textContent = numChars.toString();
+    if (numChars < 20 || numChars > 5000){
+        curr.style.color = "red";
+    }
+    else
+        curr.style.color = "#fff";
+
+}
