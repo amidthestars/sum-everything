@@ -1,8 +1,9 @@
 name: Deploy to Deta
-on: 
+on:
   push:
     branches:
-      - web_page
+      - 'web_page'
+      
 jobs:
   deploy-web:
     runs-on: ubuntu-latest
