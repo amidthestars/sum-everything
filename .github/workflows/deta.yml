@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'web_page'
+  workflow_dispatch:
       
 jobs:
   deploy-web:
