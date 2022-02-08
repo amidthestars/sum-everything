@@ -193,5 +193,4 @@ function countChars() {
     } else {
         currChars.classList.replace("text-red-400", "inherit");
     }
-
 }
