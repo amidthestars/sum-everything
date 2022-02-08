@@ -67,7 +67,7 @@ function showArticle(article, edit=false) {
     showHistory();
     if (text == null || edit == true) {
         temp_element = input_template;
-        temp_element.value = text;
+        temp_element.children[0].value = text;
         edit_text_toggle.classList.replace("fa-pen-nib", "fa-save");
     } else {
         temp_element = text_template;
@@ -79,11 +79,12 @@ function showArticle(article, edit=false) {
     article_area.append(temp_element);
     current_id = article;
 
-    // a bit of buton cleanup
+    // a bit of button/info cleanup
     new_text_button.classList.remove("hidden")
     remove_text_button.classList.remove("hidden")
     get_summary_button.classList.remove("hidden")
     if (edit == true) {
+        countChars()
         new_text_button.classList.add("hidden")
         get_summary_button.classList.add("hidden")
     }
@@ -111,7 +112,7 @@ function showSummary(summary) {
 // Event trigger for editing/saving text
 edit_text_toggle.addEventListener('click', () => {
     if (edit_text_toggle.classList.contains("fa-save")) {
-        let input_text = document.getElementById("input-text");
+        let input_text = document.getElementById("input-textarea");
 
         // CheckAscii holds array of values not in normal unicode "ascii" area
         checkAscii = input_text.value.match(/[^\u0000-\u007f]/)
@@ -179,19 +180,18 @@ get_summary_button.addEventListener('click', () => {
 })
 
 //Character count to textarea
-document.addEventListener('keyup', countChars);
+document.addEventListener('keydown', countChars);
 
-function countChars(e) {
-    const input_text = document.getElementById("input-text");
+function countChars() {
+    const input_text = document.getElementById("input-textarea");
     var numChars = input_text.value.length;
-    var curr = document.getElementById("current");
-    var maxChars = document.getElementById("maximum");
+    var currChars = document.getElementById("current");
 
-    curr.textContent = numChars.toString();
+    currChars.textContent = numChars.toString();
     if (numChars < 20 || numChars > 5000){
-        curr.style.color = "red";
+        currChars.classList.replace("inherit", "text-red-400");
+    } else {
+        currChars.classList.replace("text-red-400", "inherit");
     }
-    else
-        curr.style.color = "#fff";
 
 }

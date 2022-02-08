@@ -1,13 +1,27 @@
 // Template article field and textbox
 let current_id = String(+ new Date())
 const text_template = document.createElement("p");
-const input_template = document.createElement("textarea");
+const input_template = document.createElement("div");
+const input_template_textarea = document.createElement("textarea");
+const input_template_currchar = document.createElement("span");
+const input_template_maxchar = document.createElement("span");
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-input_template.rows = 10;
-input_template.placeholder = "Type or paste something...";
+input_template_textarea.id = "input-textarea"
+input_template_textarea.rows = 10;
+input_template_textarea.placeholder = "Type or paste something...";
 text_template.classList.add('mb-8');
-input_template.classList.add('inherit', 'p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'shake-constant');
+input_template_textarea.classList.add('inherit', 'p-2', 'w-full', 'rounded-lg', 'border', 'border-gray-400', 'shake-constant');
+input_template_currchar.id = "current"
+input_template_currchar.innerHTML = "0"
+input_template_currchar.classList.add("inherit")
+input_template_maxchar.id = "maximum"
+input_template_maxchar.classList.add("inherit")
+input_template_maxchar.innerHTML = " / 5000"
+
+input_template.appendChild(input_template_textarea)
+input_template.appendChild(input_template_currchar)
+input_template.appendChild(input_template_maxchar)
 
 // Template a history entry
 const history_template = document.createElement("li");

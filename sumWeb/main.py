@@ -1,6 +1,6 @@
 '''
 Ideas:
-	- If file empty & errmsg showing do nothing? (i.e don't refresh)
+	- If file empty & errmsg showing do nothing? (i.e don't refresh) - no actually update to edit mode and do not update contents
 '''
 import re
 import os
@@ -52,7 +52,7 @@ model_api = ModelAPI("155.248.202.186", 3000)
 
 @app.route('/', methods = ['GET'])
 def index():
-	return render_template("index-0.html")
+	return render_template("index.html")
 
 @app.route("/v1/models", methods = ['GET'])
 def get_models():
