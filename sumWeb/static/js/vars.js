@@ -62,7 +62,7 @@ const available_models = document.querySelector('.available-models');
 const article_alert = document.getElementById("article-alert");
 
 //open a websocket
-const model_socket = new WebSocket(`ws://${location.host}/modelapi`);
+const model_socket = new WebSocket(`wss://${location.host}/modelapi`);
 
 
 // Regex vars
