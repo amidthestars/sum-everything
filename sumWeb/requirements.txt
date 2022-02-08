@@ -1,4 +1,4 @@
 flask
 requests
 httpimport
-flask-sock
+flask-socketio

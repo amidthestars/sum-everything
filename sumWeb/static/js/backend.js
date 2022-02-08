@@ -50,10 +50,7 @@ function getSummary(input) {
     });
 }
 
-model_socket.onopen = function() {
-    model_socket.send("Here's some text that the server is urgently awaiting!");
-};
-
-model_socket.onmessage = function (event) {
-    console.log(event.data);
-}
+socket.on('connect', function() {
+    console.log("CONNECTED")
+    socket.emit('message', {data: 'I\'m connected!'});
+});
