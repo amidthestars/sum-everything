@@ -133,13 +133,15 @@ dmypy.json
 *.DS_Store*
 
 # Do not commit raw dataset files
-datasets*
+datasets/*
 data/bbc*
 data/cnn*
 data/dailymail*
 data/idt*
+data/tifu*
 data/hindu_indian_times_guardian_news.zip
 data/scisummnet*
+data/wikiHow*
 train/models*
 train/export/*
 train/test.data
