@@ -50,7 +50,9 @@ function getSummary(input) {
     });
 }
 
+/*
 socket.on('connect', function() {
     console.log("CONNECTED")
     socket.emit('message', {data: 'I\'m connected!'});
 });
+*/
