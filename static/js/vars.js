@@ -62,7 +62,7 @@ const available_models = document.querySelector('.available-models');
 const article_alert = document.getElementById("article-alert");
 
 //open a websocket
-var socket = io();
+//var socket = io();
 
 // Regex vars
 let multinewline = /\n+/g;
