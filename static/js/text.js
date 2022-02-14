@@ -86,11 +86,13 @@ function showArticle(article, edit=false) {
     if (edit == true) {
         countChars()
         new_text_button.classList.add("hidden")
-        get_summary_button.classList.add("hidden")
     }
     if (getArticles() == null) {
         new_text_button.classList.add("hidden")
         remove_text_button.classList.add("hidden")
+    }
+    if (text == null || edit == true) {
+        get_summary_button.classList.add("hidden")
     }
 
     cleanupButtons(article_button_container);

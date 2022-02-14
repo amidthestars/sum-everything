@@ -37,7 +37,7 @@ class ModelAPI():
             ret.mimetype = "application/json"
             return ret
         else:
-            ret = make_response(f"Model server returned {response.status.code}\nInfo: {response.content}",response.status_code)
+            ret = make_response(f"Model server returned {response.status.code}\nInfo: {response.content}", response.status_code)
             ret.mimetype = "text/plain"
             return ret
 
