@@ -1,0 +1,23 @@
+name: Build a Dataset
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+      - name: Upload to gcloud
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: ${{ secrets.GCLOUD_PROJ_ID }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD }}
+        with:
+          args: cp -r models.config gs://${{ secrets.EXPORT_PLATFORM }}
+          cli: gsutil
