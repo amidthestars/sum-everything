@@ -1,10 +1,9 @@
-name: Build a Dataset
+name: Update model config
 on:
   push:
     branches:
       - 'main'
   workflow_dispatch:
-
 
 jobs:
   build:
