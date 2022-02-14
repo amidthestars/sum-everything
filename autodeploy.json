@@ -1,7 +1,7 @@
 [
     {
         "id": "redeploy-webhook",
-        "execute-command": "git pull --force && chmod +x autodeploy.sh && ./autodeploy.sh",
+        "execute-command": "./autodeploy.sh",
         "command-working-directory": "~/sum-everything"
     }
 ]
