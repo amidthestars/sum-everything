@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd "/home/ubuntu"
+cd "/home/ubuntu/sum-everything"
+git reset --hard
+git checkout web_page
 git pull --force
 chmod +x autodeploy.sh
 tmux new-session -d -n killall
