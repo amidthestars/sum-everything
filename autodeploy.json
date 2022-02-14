@@ -2,6 +2,24 @@
     {
         "id": "redeploy-webhook",
         "execute-command": "./autodeploy.sh",
-        "command-working-directory": "/home/ubuntu/sum-everything"
+        "command-working-directory": "/home/ubuntu/sum-everything",
+        "trigger-rule":
+        {
+            "and":
+            [
+                {
+                    "match":
+                    {
+                        "type": "value",
+                        "value": "refs/heads/web_page",
+                        "parameter":
+                        {
+                            "source": "payload",
+                            "name": "ref"
+                        }
+                    }
+                }
+            ]
+        }
     }
 ]
