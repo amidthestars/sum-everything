@@ -7,6 +7,7 @@ git pull --force
 mv startup.sh /home/ubuntu/startup.sh
 chmod +x /home/ubuntu/startup.sh
 chmod +x autodeploy.sh
+pip3 install -U -r requrements.txt
 tmux new-session -d -n killall
 tmux send-keys -t killall "sudo fuser -k 443/tcp" Enter
 sleep 1
