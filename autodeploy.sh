@@ -1,5 +1,7 @@
+#!/bin/sh
+
 cd "/home/ubuntu"
-git pull
+git pull --force
 chmod +x autodeploy.sh
 tmux new-session -d -n killall
 tmux send-keys -t killall "sudo fuser -k 443/tcp" Enter

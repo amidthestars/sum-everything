@@ -2,6 +2,6 @@
     {
         "id": "redeploy-webhook",
         "execute-command": "./autodeploy.sh",
-        "command-working-directory": "~/sum-everything"
+        "command-working-directory": "/home/ubuntu/sum-everything"
     }
 ]
