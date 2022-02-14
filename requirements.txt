@@ -1,6 +1,6 @@
 flask
 requests
-httpimport
+httpimport==0.7.2
 flask_socketio
 eventlet==0.30.2
 gunicorn
