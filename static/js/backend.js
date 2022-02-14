@@ -9,18 +9,16 @@ function getModels() {
             return response.json();
         }
     })
-    .then((data) => {
+    .then((models) => {
         // If data is null then improper response
-        if (data != null){
-            let models = data["models"];
-            models.sort()
-            
-            models.forEach(model => {
+        if (models != null){
+            for (const [key, value] of Object.entries(models)) {
                 let temp_model = available_model_template.cloneNode(true);
-                temp_model.value=model
-                temp_model.innerHTML=model
+                temp_model.value = key
+                temp_model.innerHTML = key
+                temp_model.disabled = !value 
                 available_models.appendChild(temp_model)
-            });
+            }
         }
       })
 }

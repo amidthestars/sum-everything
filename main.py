@@ -43,12 +43,15 @@ class ModelAPI():
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
+MODEL_CONFIG = "https://storage.googleapis.com/sum-exported/models.config"
+MODEL_URL = "155.248.202.186"
+MODEL_PORT = 3000
 
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.urandom(12)
 socketio = SocketIO(app)
-model_api = ModelAPI("0.0.0.0", 3000)
+model_api = ModelAPI(MODEL_URL, 3000)
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -57,9 +60,16 @@ def index():
 @app.route("/v1/models", methods = ['GET'])
 def get_models():
 	# TODO: do not hardcode urls
-	url = "https://storage.googleapis.com/sum-exported/models.config"
-	models = re.findall(r"name: '(.*?)'", requests.get(url).text)
-	return {"models": models}
+    models = re.findall(r"name: '(.*?)'", requests.get(MODEL_CONFIG).text)
+    # Check which ones are enabled
+    ret = {}
+    for model in models:
+        model_status = requests.get(f"http://{MODEL_URL}:{MODEL_PORT}/v1/models/{model}").json()
+        if "error" in model_status:
+            ret[model] = False
+        else:
+            ret[model] = True
+    return ret
 
 @app.route("/v1/query", methods=['POST'])
 def query():
