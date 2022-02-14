@@ -1,0 +1,1 @@
+sudo gunicorn --worker-class eventlet -w 2 main:app --bind=0.0.0.0:443

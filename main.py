@@ -48,7 +48,7 @@ ALLOWED_EXTENSIONS = {'txt'}
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.urandom(12)
 socketio = SocketIO(app)
-model_api = ModelAPI("155.248.202.186", 3000)
+model_api = ModelAPI("0.0.0.0", 3000)
 
 @app.route('/', methods = ['GET'])
 def index():
