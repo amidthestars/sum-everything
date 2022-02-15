@@ -12,9 +12,6 @@ import tensorflow.compat.v1 as tf
 from contextlib import contextmanager
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-# Disable GPUs
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-
 # Set up logging
 tf.get_logger().propagate = False
 py_logging.root.setLevel('INFO')
@@ -48,7 +45,18 @@ parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, helping memory usage but reducing overall model efficiency.')
 args = parser.parse_args()
 
-print("All devices: ", tf.config.list_logical_devices('GPU'))
+if args.tpu != None:
+    if args.tpu != 'local':
+        args.tpu = f"grpc://{args.tpu}:8470"
+    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=args.tpu)
+    tf.enable_eager_execution()
+    tf.config.experimental_connect_to_cluster(tpu)
+    tf.tpu.experimental.initialize_tpu_system(tpu)
+    tf.disable_v2_behavior()
+
+print("All CPU: ", tf.config.list_logical_devices('CPU'))
+print("All GPU: ", tf.config.list_logical_devices('GPU'))
+print("All TPU: ", tf.config.list_logical_devices('TPU'))
 
 # Register dataset as a mixture
 ds_registrar_spec = importlib.util.find_spec('src.createtask')
@@ -74,7 +82,7 @@ seqio.MixtureRegistry.add(
 MODEL_SIZE = args.model_size
 MODEL_DIR = os.path.join(args.models_dir, MODEL_SIZE)
 
-model_paralellism, eval_batch_size = 8, 1
+model_paralellism, eval_batch_size = 1, 512
 if args.model_paralellism: model_paralellism=args.model_paralellism
 if args.batch_size: eval_batch_size=args.batch_size
 
@@ -89,8 +97,7 @@ model = t5.models.MtfModel(
     model_parallelism=model_paralellism,
     batch_size=eval_batch_size,
     sequence_length={"inputs": args.in_len, "targets": args.out_len},
-    learning_rate_schedule=0.001,
-    iterations_per_loop=10,
+    iterations_per_loop=500
 )
 
 model.eval(
