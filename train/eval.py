@@ -91,5 +91,7 @@ model = t5.models.MtfModel(
 
 model.eval(
     mixture_or_task_name="all_mix",
-    checkpoint_steps="all"
+    checkpoint_steps="all",
+    eval_with_score=True
+    compute_sequence_length=False
 )
