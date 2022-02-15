@@ -45,15 +45,6 @@ parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, helping memory usage but reducing overall model efficiency.')
 args = parser.parse_args()
 
-if args.tpu != None:
-    if args.tpu != 'local':
-        args.tpu = f"grpc://{args.tpu}:8470"
-    tpu = tf.distribute.cluster_resolver.TPUClusterResolver(tpu=args.tpu)
-    tf.enable_eager_execution()
-    tf.config.experimental_connect_to_cluster(tpu)
-    tf.tpu.experimental.initialize_tpu_system(tpu)
-    tf.disable_v2_behavior()
-
 print("All CPU: ", tf.config.list_logical_devices('CPU'))
 print("All GPU: ", tf.config.list_logical_devices('GPU'))
 print("All TPU: ", tf.config.list_logical_devices('TPU'))
@@ -82,7 +73,7 @@ seqio.MixtureRegistry.add(
 MODEL_SIZE = args.model_size
 MODEL_DIR = os.path.join(args.models_dir, MODEL_SIZE)
 
-model_paralellism, eval_batch_size = 1, 512
+model_paralellism, eval_batch_size = 1, 256
 if args.model_paralellism: model_paralellism=args.model_paralellism
 if args.batch_size: eval_batch_size=args.batch_size
 
@@ -91,13 +82,11 @@ tf.io.gfile.makedirs(os.path.join(MODEL_DIR, "validation_eval"))
 # The models from our paper are based on the Mesh Tensorflow Transformer.
 
 model = t5.models.MtfModel(
+    tpu=False,
     model_dir=MODEL_DIR,
-    tpu=args.tpu,
-    tpu_topology=args.tpu_topology,
     model_parallelism=model_paralellism,
     batch_size=eval_batch_size,
     sequence_length={"inputs": args.in_len, "targets": args.out_len},
-    iterations_per_loop=500
 )
 
 model.eval(
