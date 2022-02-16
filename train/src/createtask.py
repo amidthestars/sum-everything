@@ -38,7 +38,7 @@ def init(bucket_path, train_path, validation_path, task_name, compression_type=N
         # Lowercase targets before computing metrics.
         postprocess_fn=t5.data.postprocessors.lower_text,
         # We'll use accuracy as our evaluation metric.
-        metric_fns=[t5.evaluation.metrics.accuracy],
+        metric_fns=[t5.evaluation.metrics.accuracy, t5.evaluation.metrics.sequence_accuracy, t5.evaluation.metrics.bleu],
         output_features=DEFAULT_OUTPUT_FEATURES,
     )
 
