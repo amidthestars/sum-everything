@@ -70,18 +70,16 @@ for dataset in args.datasets:
         ds_registrar_spec.loader.exec_module(new_ds)
         sys.modules['new_ds'] = new_ds
         new_ds.init(info["bucket_path"],info["train_path"], info["validation_path"], 
-                    "all_mix", info["compression_type"], info["store_mode"])
+                    dataset, info["compression_type"], info["store_mode"])
     else:
         warnings.warn(f"Dataset {dataset} was not in datasets.json, and will not be included.")
         args.datasets.remove(dataset)
 
-"""
 seqio.MixtureRegistry.add(
     "all_mix",
     args.datasets,
     default_rate=1.0
 )
-"""
 
 MODEL_SIZE = args.model_size
 MODEL_DIR = os.path.join(args.models_dir, MODEL_SIZE)
@@ -126,6 +124,5 @@ else:
 model.eval(
     mixture_or_task_name="all_mix",
     checkpoint_steps="all",
-    eval_with_score=True,
     compute_sequence_length=False
 )
