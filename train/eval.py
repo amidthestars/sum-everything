@@ -39,6 +39,8 @@ parser.add_argument('-in_len', type=int, default=2048,
                     help='Maximum length of input. Inputs will be padded to this length.')
 parser.add_argument('-out_len', type=int, default=512,
                     help='Maximum length of output. Outputs will be padded to this length.')
+parser.add_argument('-evaluate_after', type=int, default=100,
+                    help='Calcuates the loss after this value')
 
 # There are already defaults for these values per model size. These are simply overrides.
 parser.add_argument('-batch_size', type=int, default=None,
@@ -100,6 +102,7 @@ if args.tpu:
         model_parallelism=model_parallelism,
         batch_size=eval_batch_size,
         sequence_length={"inputs": args.in_len, "targets": args.out_len},
+        iterations_per_loop=args.evaluate_after,
     )
 elif args.gpus:
     model = t5.models.MtfModel(
@@ -110,6 +113,7 @@ elif args.gpus:
         model_parallelism=model_parallelism,
         batch_size=eval_batch_size,
         sequence_length={"inputs": args.in_len, "targets": args.out_len},
+        iterations_per_loop=args.evaluate_after,
     )
 else:
     print("WARNING: Running with no accelerators is not a supported case, and may be very slow")
@@ -119,6 +123,7 @@ else:
         model_parallelism=model_parallelism,
         batch_size=eval_batch_size,
         sequence_length={"inputs": args.in_len, "targets": args.out_len},
+        iterations_per_loop=args.evaluate_after,
     )
 
 model.eval(
