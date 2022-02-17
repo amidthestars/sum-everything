@@ -37,11 +37,19 @@ function getSummary(input) {
         )
     };
 
+    console.log("FETCHING SUMMARY");
+    showAlert(summary_alert, "Loading article summary... \nGive us a second :)", "green", null, 120000);
+
     return fetch("/v1/query", options)
     .then(response => { 
         if (response.status == 200){
+
+            //console.log("FETCHING SUCCEEDED!");
+            showAlert(summary_alert, "Summary received!", "green");
+
             return response.json();
         }
+        showAlert(summary_alert, "Failed to receive summary.", "red", "fa-exclamation-triangle");
     })
     .then(data => {
         return data;

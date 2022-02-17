@@ -61,6 +61,9 @@ const available_models = document.querySelector('.available-models');
 // Get Alert DOM elements
 const article_alert = document.getElementById("article-alert");
 
+// Get Summary Alert DOM element
+const summary_alert = document.getElementById("summary-alert");
+
 //open a websocket
 //var socket = io();
 

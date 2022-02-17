@@ -172,6 +172,9 @@ get_summary_button.addEventListener('click', () => {
     getSummary(text).then(result => {
         if (result != null) {
             let [text, summary] = [result['inputs'][0], result['outputs'][0]]
+
+            console.log("SUMMARY SET");
+            
             setSummary(current_id, text, summary)
         }
         else {
@@ -182,7 +185,7 @@ get_summary_button.addEventListener('click', () => {
 })
 
 //Character count to textarea
-document.addEventListener('keydown', countChars);
+document.addEventListener('keyup', countChars);
 
 function countChars() {
     const input_text = document.getElementById("input-textarea");

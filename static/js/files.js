@@ -17,7 +17,7 @@ file_input.addEventListener('change', function() {
         // Check proper file length
         if (resLen < 20 || resLen > 5000) {
             alertStr = "Input length cannot be less than 20 or more than 5000 characters. Current length: " + fr.result.length;
-            showAlert(article_alert, alertStr, "red", "fa-exclamation-triangle")
+            showAlert(article_alert, alertStr, "red", "fa-exclamation-triangle", 20000)
         }
         else{
             // CheckAscii holds array of values not in normal unicode "ascii" area
@@ -45,6 +45,7 @@ file_input.addEventListener('change', function() {
             }
             else{
                 // Create new article
+                showAlert(article_alert, "Article submitted!", "green");
                 setArticle(String(+ new Date()), fr.result);
             }
         }
