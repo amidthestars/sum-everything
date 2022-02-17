@@ -65,8 +65,10 @@ const article_alert = document.getElementById("article-alert");
 const summary_alert = document.getElementById("summary-alert");
 
 //open a websocket
-//var socket = io();
+var socket = io();
 
 // Regex vars
 let multinewline = /\n+/g;
 let numcol = /grid-cols-\d/g;
+let textcolor400 = /text-(.*?)-400/g;
+let iconfa = /fa-.+/g;

@@ -6,52 +6,49 @@ import re
 import os
 import requests
 import httpimport
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, request, make_response
-
-# Dynamically import from main branch
-cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src'
-with httpimport.remote_repo(["helpers"], cleaner_module):
-    from helpers import clean, parse
-
-class ModelAPI():
-    def __init__(self, url: str, port: int, model: str=None):
-        self.url = f"http://{url}:{port}/v1/models/"
-        self.model = model
-
-    def set_model(self, model: str):
-        self.model = model
-
-    def query(self, inputs: str, batches: int) -> dict:
-        data = {"inputs": [clean(inputs)]*batches}
-        response = requests.post(f"{self.url}{self.model}:predict", json=data)
-        if response.status_code == 200:
-            # Response cleanup
-            response = response.json()['outputs']
-            app.logger.info(response)
-            for label in response:
-                response[label] = [parse(entry) for entry in response[label]]
-
-            # Prepare flask return
-            ret = make_response(response, 200)
-            ret.mimetype = "application/json"
-            return ret
-        else:
-            ret = make_response(f"Model server returned {response.status.code}\nInfo: {response.content}", response.status_code)
-            ret.mimetype = "text/plain"
-            return ret
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
 MODEL_CONFIG = "https://storage.googleapis.com/sum-exported/models.config"
 MODEL_URL = "155.248.202.186"
 MODEL_PORT = 3000
+MODEL_URL = f"http://{MODEL_URL}:{MODEL_PORT}/v1/models/"
 
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
 app.secret_key = os.urandom(12)
 socketio = SocketIO(app)
-model_api = ModelAPI(MODEL_URL, 3000)
+
+# Dynamically import from main branch
+cleaner_module = 'https://raw.githubusercontent.com/JEF1056/sum-everything/main/data/src'
+with httpimport.remote_repo(["helpers"], cleaner_module):
+    from helpers import clean, parse
+
+acks = {
+    "received": {
+        "message": "Request received! - Processing!",
+        "color": "yellow",
+        "icon": "fa-dumpster"
+    },
+    "cleaned": {
+        "message": "Processing Done. - Creating a summary!",
+        "color": "blue",
+        "icon": "fa-dumpster-fire"
+    },
+    "success": {
+        "message": "Here you go! *high five*",
+        "color": "green",
+        "icon": "fa-thumbs-up"
+    },
+    "error": {
+        "message": "Ohno... the model couldn't figure it out...",
+        "color": "red",
+        "icon": "fa-fire"
+    }
+}
+
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -64,24 +61,32 @@ def get_models():
     # Check which ones are enabled
     ret = {}
     for model in models:
-        model_status = requests.get(f"http://{MODEL_URL}:{MODEL_PORT}/v1/models/{model}").json()
+        model_status = requests.get(f"{MODEL_URL}{model}").json()
         if "error" in model_status:
             ret[model] = False
         else:
             ret[model] = True
     return ret
 
-@app.route("/v1/query", methods=['POST'])
-def query():
-    data = request.json
-    model_api.set_model(data["model"])
-    response = model_api.query(data["input"], 1)
-    return response
+@socketio.on('query')
+def query(data):
+    print(f"Query got {data} of type {type(data)}")
+    model, inputs = data["model"], data["input"]
+    emit('model_ack', dict(status="received", **acks["received"]))
+    inputs = clean(inputs)
+    emit('model_ack', dict(status="cleaned", inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
+    data = {"inputs": [inputs]}
+    response = requests.post(f"{MODEL_URL}{model}:predict", json=data)
+    if response.status_code == 200:
+        # Response cleanup
+        response = response.json()['outputs']
+        for label in response:
+            response[label] = [parse(entry) for entry in response[label]]
 
-@socketio.on('message')
-def handle_message(data):
-    app.logger.info(f'received message: {data}')
-    print(f'received message: {data}')
+        # Prepare socket emit
+        emit('model_response',  dict(status="success", **response, **acks["success"]))
+    else:
+        emit('model_response', dict(status="error", info=f"Model server returned {response.status_code}\nInfo: {response.content}", **acks["error"]))
 
 if __name__ == "__main__":
     app.run(port=7000)
