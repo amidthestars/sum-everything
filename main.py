@@ -31,22 +31,22 @@ acks = {
     "received": {
         "message": "Request received! - Processing!",
         "color": "yellow",
-        "icon": "fa-hammer"
+        "icon": ["fa-hammer"]
     },
     "cleaned": {
         "message": "Processing Done. - Creating a summary!",
         "color": "blue",
-        "icon": "fa-dumpster"
+        "icon": ['shake-constant', 'shake-slow', 'fa-dumpster']
     },
     "success": {
         "message": "Here you go! *high five*",
         "color": "green",
-        "icon": "fa-cat"
+        "icon": ["fa-cat"]
     },
     "error": {
-        "message": "Ohno... the model couldn't figure it out...",
+        "message": "Ohno... the model couldn't figure it out... (check js console for the deets)",
         "color": "red",
-        "icon": "fa-dumpster-fire"
+        "icon": ["fa-dumpster-fire"]
     }
 }
 
@@ -70,7 +70,6 @@ def get_models():
 
 @socketio.on('query')
 def query(data):
-    print(f"Query got {data} of type {type(data)}")
     model, inputs = data["model"], data["input"]
     emit('model_ack', dict(status="received", **acks["received"]))
     inputs = clean(inputs)

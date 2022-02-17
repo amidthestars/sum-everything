@@ -31,7 +31,6 @@ function getSummary(model, input) {
 }
 
 socket.on('model_ack', function(data) {
-    console.log(data)
     /*
     flow should be:
     [query] -> received -> cleaned -> [result]
@@ -60,6 +59,7 @@ socket.on('model_response', function(data) {
             break;
         case 'error':
             showAlert(summary_alert, msg, color, icon, 18000);
+            console.log(data["info"])
             break;
     }
 });
