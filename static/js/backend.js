@@ -23,42 +23,47 @@ function getModels() {
       })
 }
 
-function getSummary(input) {
-    let options = {
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json;charset=utf-8"
-        },
-        "body": JSON.stringify(
-            {
-                "model": available_models.value,
-                "input": input
-            }
-        )
-    };
-
-    console.log("FETCHING SUMMARY");
-    showAlert(summary_alert, "Loading article summary... \nGive us a second :)", "green", null, 120000);
-
-    return fetch("/v1/query", options)
-    .then(response => { 
-        if (response.status == 200){
-
-            //console.log("FETCHING SUCCEEDED!");
-            showAlert(summary_alert, "Summary received!", "green");
-
-            return response.json();
-        }
-        showAlert(summary_alert, "Failed to receive summary.", "red", "fa-exclamation-triangle");
-    })
-    .then(data => {
-        return data;
+function getSummary(model, input) {
+    socket.emit('query', {
+        "model": model,
+        "input": input
     });
 }
 
-/*
+socket.on('model_ack', function(data) {
+    console.log(data)
+    /*
+    flow should be:
+    [query] -> received -> cleaned -> [result]
+    Things in brackets are handled by other opera   tors
+    */
+
+    let [msg, color, icon] = [data["message"], data["color"], data["icon"]]
+    switch (data['status']) {
+        case 'received':
+            showAlert(summary_alert, msg, color, icon, 1200000);
+            break;
+        case 'cleaned':
+            showAlert(summary_alert, msg, color, icon, 1200000);
+            setArticle(current_id, data["inputs"])
+            break;
+    }
+});
+
+socket.on('model_response', function(data) {
+    let [msg, color, icon] = [data["message"], data["color"], data["icon"]]
+    switch (data['status']) {
+        case 'success':
+            showAlert(summary_alert, msg, color, icon, 18000);
+            let [text, summary] = [data['inputs'][0], data['outputs'][0]]
+            setSummary(current_id, text, summary)
+            break;
+        case 'error':
+            showAlert(summary_alert, msg, color, icon, 18000);
+            break;
+    }
+});
+
 socket.on('connect', function() {
     console.log("CONNECTED")
-    socket.emit('message', {data: 'I\'m connected!'});
 });
-*/

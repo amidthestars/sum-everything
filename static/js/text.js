@@ -169,19 +169,7 @@ copy_summary_buttton.addEventListener('click', () => {
 
 get_summary_button.addEventListener('click', () => {
     let [text, _] = getArticle(current_id);
-    getSummary(text).then(result => {
-        if (result != null) {
-            let [text, summary] = [result['inputs'][0], result['outputs'][0]]
-
-            console.log("SUMMARY SET");
-            
-            setSummary(current_id, text, summary)
-        }
-        else {
-            showAlert(article_alert, "Model could not summarize data.", "red", "fa-exclamation-triangle")
-        }
-        
-    });
+    getSummary(available_models.value, text)
 })
 
 //Character count to textarea
