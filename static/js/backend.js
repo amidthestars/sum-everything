@@ -3,7 +3,7 @@ function getModels() {
     fetch('/v1/models')
     .then((response) => {
         if (response.status != 200){
-            showAlert(article_alert, "Cannot get model data", "red", "fa-exclamation-triangle");
+            showAlert(article_alert, "Cannot get model data", "red", ["fa-exclamation-triangle"]);
         }
         else{
             return response.json();
