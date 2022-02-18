@@ -4,6 +4,7 @@ Ideas:
 '''
 import re
 import os
+import random
 import requests
 import httpimport
 from flask_socketio import SocketIO, emit
@@ -30,25 +31,24 @@ acks = {
     "received": {
         "message": "Request received! - Processing!",
         "color": "yellow",
-        "icon": "fa-dumpster"
+        "icon": ["fa-hammer"]
     },
     "cleaned": {
         "message": "Processing Done. - Creating a summary!",
         "color": "blue",
-        "icon": "fa-dumpster-fire"
+        "icon": ['shake-constant', 'shake-slow', 'fa-dumpster']
     },
     "success": {
         "message": "Here you go! *high five*",
         "color": "green",
-        "icon": "fa-thumbs-up"
+        "icon": ["fa-cat"]
     },
     "error": {
-        "message": "Ohno... the model couldn't figure it out...",
+        "message": "Ohno... the model couldn't figure it out... (check js console for the deets)",
         "color": "red",
-        "icon": "fa-fire"
+        "icon": ["fa-dumpster-fire"]
     }
 }
-
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -70,7 +70,6 @@ def get_models():
 
 @socketio.on('query')
 def query(data):
-    print(f"Query got {data} of type {type(data)}")
     model, inputs = data["model"], data["input"]
     emit('model_ack', dict(status="received", **acks["received"]))
     inputs = clean(inputs)
