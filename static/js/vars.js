@@ -65,7 +65,10 @@ const article_alert = document.getElementById("article-alert");
 const summary_alert = document.getElementById("summary-alert");
 
 //open a websocket
-var socket = io();
+const socket = io();
+
+// Loading element
+const loader = document.getElementById("loader");
 
 // Regex vars
 let multinewline = /\n+/g;
