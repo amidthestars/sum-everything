@@ -23,5 +23,4 @@ jobs:
         with:
           path: ".ci/requirements.txt"
       - name: Run style
-        working-directory: ./.ci
         run: chmod +x style.sh && ./style.sh

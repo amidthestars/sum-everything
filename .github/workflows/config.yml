@@ -25,7 +25,6 @@ jobs:
         with:
           path: ".ci/requirements.txt"
       - name: Run style
-        working-directory: ./.ci
         run: chmod +x style.sh && ./style.sh
       - name: Upload to gcloud
         uses: actions-hub/gcloud@master
