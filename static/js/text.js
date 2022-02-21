@@ -136,12 +136,12 @@ edit_text_toggle.addEventListener('click', () => {
 
         // Check that text is proper length
         if (input_text.value.length < 20 || input_text.value.length > 5000) {
-            showAlert(article_alert, "Input length cannot be less than 20 or more than 5000 characters", "red", "fa-exclamation-triangle")
+            showAlert(article_alert, "Input length cannot be less than 20 or more than 5000 characters", "red", ["fa-exclamation-triangle"])
             redShake(input_text)
         }
         // Check that text is not binary
         else if (numNonAsciiVals > 0){ 
-            showAlert(article_alert, "Input must be plain text!", "red", "fa-exclamation-triangle")
+            showAlert(article_alert, "Input must be plain text!", "red", ["fa-exclamation-triangle"])
             redShake(input_text)
         } else {
             setArticle(current_id, input_text.value)
