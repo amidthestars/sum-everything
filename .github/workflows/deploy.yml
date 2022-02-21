@@ -22,5 +22,6 @@ jobs:
         uses: py-actions/py-dependency-install@v3
         with:
           path: ".ci/requirements.txt"
-      - name: Run tests
-        run: chmod +x tests.sh && ./tests.sh
+      - name: Run style
+        working-directory: ./.ci
+        run: chmod +x style.sh && ./style.sh
