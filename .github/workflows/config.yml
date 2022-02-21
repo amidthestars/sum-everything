@@ -13,7 +13,7 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v2
       - name: Run tests
-        run: tests.py
+        run: ./tests.sh
       - name: Upload to gcloud
         uses: actions-hub/gcloud@master
         env:
