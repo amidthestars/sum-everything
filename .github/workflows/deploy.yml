@@ -15,4 +15,4 @@ jobs:
         with:
           ref: 'web_page'
       - name: Run tests
-        run: ./tests.sh
+        run: chmod +x tests.sh && ./tests.sh
