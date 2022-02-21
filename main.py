@@ -1,14 +1,15 @@
 '''
 Ideas:
-	- If file empty & errmsg showing do nothing? (i.e don't refresh) - no actually update to edit mode and do not update contents
+    - If file empty & errmsg showing do nothing? (i.e don't refresh)
+    - no actually update to edit mode and do not update contents
 '''
+
 import re
 import os
-import random
 import requests
 import httpimport
+from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
-from flask import Flask, render_template, request, make_response
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
@@ -52,11 +53,11 @@ acks = {
 
 @app.route('/', methods = ['GET'])
 def index():
-	return render_template("index.html")
+    return render_template("index.html")
 
 @app.route("/v1/models", methods = ['GET'])
 def get_models():
-	# TODO: do not hardcode urls
+    # TODO: do not hardcode urls
     models = re.findall(r"name: '(.*?)'", requests.get(MODEL_CONFIG).text)
     # Check which ones are enabled
     ret = {}
@@ -83,9 +84,16 @@ def query(data):
             response[label] = [parse(entry) for entry in response[label]]
 
         # Prepare socket emit
-        emit('model_response',  dict(status="success", **response, **acks["success"]))
+        emit('model_response', dict(status="success", **response, **acks["success"]))
     else:
-        emit('model_response', dict(status="error", info=f"Model server returned {response.status_code}\nInfo: {response.content}", **acks["error"]))
+        emit(
+            'model_response',
+            dict(
+                status="error",
+                info=f"Model server returned {response.status_code}\nInfo: {response.content}",
+                **acks["error"]
+            )
+        )
 
 if __name__ == "__main__":
     app.run(port=7000)
