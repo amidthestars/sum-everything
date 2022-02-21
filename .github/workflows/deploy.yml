@@ -24,3 +24,5 @@ jobs:
           path: ".ci/requirements.txt"
       - name: Run style
         run: chmod +x style.sh && ./style.sh
+      - name: Notify deploy server
+        run: "curl -X POST ${{ secrets.PROD_IP }} -d {\"ref\": \"refs/heads/web_page\"}"
