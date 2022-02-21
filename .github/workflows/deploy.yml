@@ -1,0 +1,28 @@
+name: Deploy web to production
+on:
+  push:
+    branches:
+      - 'web_page'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+        with:
+          ref: 'web_page'
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        uses: py-actions/py-dependency-install@v3
+        with:
+          path: ".ci/requirements.txt"
+      - name: Run style
+        run: chmod +x style.sh && ./style.sh
+      - name: Notify deploy server
+        run: "curl -X POST {{ secrets.PROD_IP }} -d {\"ref\": \"refs/heads/web_page\"}"
