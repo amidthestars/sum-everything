@@ -152,6 +152,38 @@ edit_text_toggle.addEventListener('click', () => {
     }
 });
 
+//Event trigger for uploading a link
+upload_link_toggle.addEventListener('click', () =>{
+    let input_text = document.getElementById("input-textarea");
+
+    // Send data to flask backend to scrape from page
+    fetch(`${window.origin}/get-route`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(input_text.value),
+        cache: "no-cache",
+        headers: new Headers({
+          "content-type": "application/json"
+        })
+    })
+    .then(function(response) {
+        if (response.status !== 200) {
+            showAlert(article_alert, "Page could not be reached!", "red", ["fa-exclamation-triangle"]);
+            return;
+        }
+        response.json().then(function(article_data) {
+            setArticle(current_id, article_data.article);
+            showArticle(current_id, edit=false);
+        });
+    })
+    .catch(function(error) {
+        showAlert(article_alert, "Error in the backedn... Please stand by!", "red", ["fa-exclamation-triangle"]);
+        console.log("Fetch error: " + error);
+    });
+
+
+})
+
 //Event trigger for starting new article
 new_text_button.addEventListener('click', () => {
     showArticle(String(+ new Date()), edit=true);

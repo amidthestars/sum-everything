@@ -8,8 +8,11 @@ import re
 import os
 import requests
 import httpimport
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
+from bs4 import BeautifulSoup
+import requests
+import nltk
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
@@ -68,6 +71,53 @@ def get_models():
         else:
             ret[model] = True
     return ret
+
+@app.route('/get-route', methods=['GET', 'POST'])
+def get_js_link():
+    adStuff = ['Advertisement', "Supported by"]
+    print("*********************************************")
+    url = request.get_json()
+    
+    try:
+        page = requests.get(url)
+    except Exception as e:
+        error_type, error_obj, error_info = sys.exc_info()
+
+        print("Error for link:", URL)
+
+        print(error_type, 'Line:', error_info.tb_lineno)
+        # Return if error in getting to link
+        return "0"
+
+    nltk.download('punkt')
+
+    soup = BeautifulSoup(page.text, "html.parser")
+
+    links = soup.find_all('p', attrs={'class':'css-axufdj evys1bk0'})
+
+    article = ''
+
+    for e in links:
+        m = e.getText()
+
+        if m in adStuff:
+            continue
+
+        # If less, then add it
+        if len(article+m) <= 5000:
+            article = article + m
+        else:
+            sentences = nltk.tokenize.sent_tokenize(m)
+            for sent in sentences:
+                if len(article + ' ' + sent) <= 5000:
+                    article = article + ' ' + sent
+                else:
+                    break
+
+            break
+
+    message = {'article':article}
+    return jsonify(message)
 
 @socketio.on('query')
 def query(data):
