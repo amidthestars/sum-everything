@@ -42,8 +42,10 @@ def worker(split, title):
     filename = title + ".txt"
     try:
         file = io.open(os.path.join(IN, filename), mode="r", encoding="utf-8")
-        data = [postprocess(clean(part)) for part in file.read().split("@article")]  # apply cleaning to each part
-    except:  # in case the title cannot be recognized by system
+        # apply cleaning to each part
+        data = [postprocess(clean(part)) for part in file.read().split("@article")]
+    except Exception as e:  # in case the title cannot be recognized by system
+        print(e)
         data = [False, False]
     if data[0] and data[1]:
         return split, data[1], data[0] if not data[0].startswith("/n") else data[0][2:]
@@ -55,7 +57,12 @@ if __name__ == '__main__':
     splits = ["train", "validation"]
     split_distrib = random.choices(splits, weights=[80, 20], k=len(title_file))
     os.makedirs(OUT, exist_ok=True)
-    outputs = {split: io.open(os.path.join(OUT, f"{PREFIX}.{split}"), mode="w", encoding="utf-8") for split in splits}
+    outputs = {
+        split: io.open(os.path.join(OUT, f"{PREFIX}.{split}"),
+        mode="w",
+        encoding="utf-8")
+        for split in splits
+    }
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
         results = list(tqdm(executor.map(worker, split_distrib, title_file), total=len(title_file),
@@ -67,4 +74,5 @@ if __name__ == '__main__':
                     outputs[split].write(f"{article}\t{summary}\n")
 
     # Close and cleanup
-    for output in outputs: outputs[output].close()
+    for output in outputs:
+        outputs[output].close()

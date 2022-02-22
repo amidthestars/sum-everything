@@ -2,15 +2,17 @@
 
 import re
 
-normalize_chars={'Š':'S', 'š':'s', 'Ð':'Dj','Ž':'Z', 'ž':'z', 'À':'A', 'Á':'A', 'Â':'A', 'Ã':'A', 'Ä':'A',
-    'Å':'A', 'Æ':'A', 'Ç':'C', 'È':'E', 'É':'E', 'Ê':'E', 'Ë':'E', 'Ì':'I', 'Í':'I', 'Î':'I',
-    'Ï':'I', 'Ñ':'N', 'Ń':'N', 'Ò':'O', 'Ó':'O', 'Ô':'O', 'Õ':'O', 'Ö':'O', 'Ø':'O', 'Ù':'U', 'Ú':'U',
-    'Û':'U', 'Ü':'U', 'Ý':'Y', 'Þ':'B', 'ß':'Ss','à':'a', 'á':'a', 'â':'a', 'ã':'a', 'ä':'a',
-    'å':'a', 'æ':'a', 'ç':'c', 'è':'e', 'é':'e', 'ê':'e', 'ë':'e', 'ì':'i', 'í':'i', 'î':'i',
-    'ï':'i', 'ð':'o', 'ñ':'n', 'ń':'n', 'ò':'o', 'ó':'o', 'ô':'o', 'õ':'o', 'ö':'o', 'ø':'o', 'ù':'u',
-    'ú':'u', 'û':'u', 'ü':'u', 'ý':'y', 'ý':'y', 'þ':'b', 'ÿ':'y', 'ƒ':'f', 'ă':'a', 'î':'i', 'â':'a',
-    'ș':'s', 'ț':'t', 'Ă':'A', 'Î':'I', 'Â':'A', 'Ș':'S', 'Ț':'T', '“':'"', '”':'"', "’":"'"}
-alphabets="""ᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹
+normalize_chars = {'Š': 'S', 'š': 's', 'Ð': 'D', 'Ž': 'Z', 'ž': 'z', 'À': 'A', 'Á': 'A', 'Â': 'A',
+    'Ã': 'A', 'Ä': 'A', 'Å': 'A', 'Æ': 'A', 'Ç': 'C', 'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E',
+    'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I', 'Ñ': 'N', 'Ń': 'N', 'Ò': 'O', 'Ó': 'O', 'Ô': 'O',
+    'Õ': 'O', 'Ö': 'O', 'Ø': 'O', 'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U', 'Ý': 'Y', 'Þ': 'B',
+    'ß': 'S', 'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'æ': 'a', 'ç': 'c',
+    'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ð': 'o',
+    'ñ': 'n', 'ń': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o', 'ù': 'u',
+    'ú': 'u', 'û': 'u', 'ü': 'u', 'ý': 'y', 'ý': 'y', 'þ': 'b', 'ÿ': 'y', 'ƒ': 'f', 'ă': 'a',
+    'î': 'i', 'â': 'a', 'ș': 's', 'ț': 't', 'Ă': 'A', 'Î': 'I', 'Â': 'A', 'Ș': 'S', 'Ț': 'T',
+    '“': '"', '”': '"', "’": "'"}
+alphabets = """ᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᵠᴿˢᵀᵁⱽᵂˣʸᶻ¹²³⁴⁵⁶⁷⁸⁹
 ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ
 ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ
 𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ
@@ -81,24 +83,33 @@ alphabets="""ᵃᵇᶜᵈᵉᶠᵍʰᶦʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸ
 
 for alphabet in alphabets[1:]:
     for ind, char in enumerate(alphabet.strip()):
-        try:normalize_chars[char]=alphabets[0][ind]
-        except: print(alphabet, len(alphabet), len(alphabets[0]));break
-normalize_chars.update({i:i for i in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'})
+        try:
+            normalize_chars[char] = alphabets[0][ind]
+        except Exception as e:
+            print(e)
+            print(alphabet, len(alphabet), len(alphabets[0]))
+            break
+normalize_chars.update({i: i for i in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'})
 
-normal_map=str.maketrans(normalize_chars)
+normal_map = str.maketrans(normalize_chars)
 del normalize_chars
 
-#precompile regex
-r2=re.compile(r'https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=\n]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)|:[^\n\s]+?:|[\w\-\.]+@(?:[\w-]+\.)+[\w-]{2,4}|(?:\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|```.+?```\n?|(?:\\n)+|[^a-z0-9.,:;%$&\'\"@!?\s\<\>\/\-\+\=\(\)\[\]*_]+|(?<=[a-z.,\':;!?\/]) +(?=[.,\'!?\/])|([,\':;\s\/\(\)\[\]\+\-\<\>\=])\1+|([_])\2{2,}|([a-z.!?*])\3{3,}|(: )(?:> (?:.*?)(?:\n+|\\n+|$))+', flags=re.DOTALL | re.IGNORECASE)
-r3=re.compile(r'[\U00003000\U0000205F\U0000202F\U0000200A\U00002000-\U00002009\U00001680\U000000A0\t]+| {2,}')
-r4=re.compile(r"([a-z1-9\'\"][\.\?\!\,])([a-z1-9\'\"])", re.IGNORECASE)
+# precompile regex
+r2 = re.compile(r'https?: \/\/(?: www\.)?[-a-zA-Z0-9@: %._\+~#=\n]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?: [-a-zA-Z0-9()@: %_\+.~#?&\/=]*)|: [^\n\s]+?: |[\w\-\.]+@(?: [\w-]+\.)+[\w-]{2,4}|(?: \+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}|```.+?```\n?|(?: \\n)+|[^a-z0-9.,: ;%$&\'\"@!?\s\<\>\/\-\+\=\(\)\[\]*_]+|(?<=[a-z.,\': ;!?\/]) +(?=[.,\'!?\/])|([,\': ;\s\/\(\)\[\]\+\-\<\>\=])\1+|([_])\2{2,}|([a-z.!?*])\3{3,}|(: )(?: > (?: .*?)(?: \n+|\\n+|$))+', flags=re.DOTALL | re.IGNORECASE)  # noqa: E501
+r3 = re.compile(r'[\U00003000\U0000205F\U0000202F\U0000200A\U00002000-\U00002009\U00001680\U000000A0\t]+| {2,}')  # noqa: E501
+r4 = re.compile(r"([a-z1-9\'\"][\.\?\!\,])([a-z1-9\'\"])", re.IGNORECASE)  # noqa: E501
 
 def clean(text):
-    text= text.translate(normal_map) #handle special chars from other langs
-    text= re.sub(r2, r"\1\2\2\3\3\3\4", text.strip()) #remove urls, emails, code blocks, custom emojis, non-emoji, punctuation, letters, and phone numbers
-    text= re.sub(r3, " ", text.strip()) #handle... interesting spaces
-    text= re.sub(r4, r"\1 \2", text.strip())
-    text= "/n".join([ln.strip().strip("\t") for ln in text.split("\n")]) #handle newlines
+    # handle special chars from other langs
+    text = text.translate(normal_map)
+    # remove urls, emails, code blocks, custom emojis,
+    # non-emoji, punctuation, letters, and phone numbers
+    text = re.sub(r2, r"\1\2\2\3\3\3\4", text.strip())
+    # handle... interesting spaces
+    text = re.sub(r3, " ", text.strip())
+    text = re.sub(r4, r"\1 \2", text.strip())
+    # handle newlines
+    text = "/n".join([ln.strip().strip("\t") for ln in text.split("\n")])
 
     return text.lstrip(("-!.,^# ")).strip()
 

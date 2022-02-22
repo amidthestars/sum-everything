@@ -12,7 +12,7 @@ install:
 tpu: install
 	sudo -H pip3 uninstall tensorflow tensorflow-text
 	sudo -H pip3 install --upgrade --force-reinstall /usr/share/tpu/*.whl
-	sudo -H pip3 install --upgrade tensorflow-text-nightly==2.7.0.dev20210924
+	sudo -H pip3 install --upgrade tensorflow-text-nightly = =2.7.0.dev20210924
 
 compress.datasets:
 	tar -czvf datasets.tar.gz datasets
