@@ -74,12 +74,11 @@ def get_models():
 @app.route('/get-route', methods=['GET', 'POST'])
 def get_js_link():
     adStuff = ['Advertisement', "Supported by"]
-
     url = request.get_json()
-    
     try:
         page = requests.get(url)
-    except:
+    except Exception as e:
+        print(e)
         # Return if error in getting to link
         return "0"
 

@@ -169,15 +169,22 @@ upload_link_toggle.addEventListener('click', () =>{
     .then(function(response) {
         if (response.status !== 200) {
             showAlert(article_alert, "Page could not be reached!", "red", ["fa-exclamation-triangle"]);
+            showArticle(current_id, edit=true)
             return;
         }
         response.json().then(function(article_data) {
-            setArticle(current_id, article_data.article);
-            showArticle(current_id, edit=false);
+            console.log(article_data)
+            if (article_data == 0) {
+                showAlert(article_alert, "Page could not be reached!", "red", ["fa-exclamation-triangle"]);
+            }
+            else{
+                setArticle(current_id, article_data.article);
+                showArticle(current_id, edit=false);
+            }
         });
     })
     .catch(function(error) {
-        showAlert(article_alert, "Error in the backedn... Please stand by!", "red", ["fa-exclamation-triangle"]);
+        showAlert(article_alert, "Error in the backedn... Please stand!", "red", ["fa-exclamation-triangle"]);
         console.log("Fetch error: " + error);
     });
 
