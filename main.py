@@ -79,12 +79,7 @@ def get_js_link():
     
     try:
         page = requests.get(url)
-    except Exception as e:
-        error_type, error_obj, error_info = sys.exc_info()
-
-        print("Error for link:", URL)
-
-        print(error_type, 'Line:', error_info.tb_lineno)
+    except:
         # Return if error in getting to link
         return "0"
 
@@ -92,7 +87,7 @@ def get_js_link():
 
     soup = BeautifulSoup(page.text, "html.parser")
 
-    links = soup.find_all('p', attrs={'class':'css-axufdj evys1bk0'})
+    links = soup.find_all('p', attrs={'class': 'css-axufdj evys1bk0'})
 
     article = ''
 
@@ -103,7 +98,7 @@ def get_js_link():
             continue
 
         # If less, then add it
-        if len(article+m) <= 5000:
+        if len(article + m) <= 5000:
             article = article + m
         else:
             sentences = nltk.tokenize.sent_tokenize(m)
@@ -115,7 +110,7 @@ def get_js_link():
 
             break
 
-    message = {'article':article}
+    message = {'article': article}
     return jsonify(message)
 
 @socketio.on('query')
