@@ -11,7 +11,6 @@ import httpimport
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 from bs4 import BeautifulSoup
-import requests
 import nltk
 
 # For file uploads
@@ -75,7 +74,7 @@ def get_models():
 @app.route('/get-route', methods=['GET', 'POST'])
 def get_js_link():
     adStuff = ['Advertisement', "Supported by"]
-    print("*********************************************")
+
     url = request.get_json()
     
     try:

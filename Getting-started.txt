@@ -11,6 +11,8 @@ Prereq:
 	-httpimport
 	-requests 
 	-flask-sock
+	- bs4
+	- nltk
 
 1.) Navigate into 'Summarize-web' using command line. Assuming you're using Python 3
 
