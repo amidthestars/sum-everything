@@ -56,7 +56,7 @@ const dark_mode_toggle = document.querySelector(".js-change-theme");
 const body = document.querySelector("body");
 
 // Get DOM elements to upload a link
-const upload_link_toggle = document.querySelector('.js-upload-link');
+const upload_link_toggle = document.querySelector(".js-upload-link");
 
 // Get DOM elements needed to read text files
 const upload_file_buttton = document.querySelector(".js-copy-file");

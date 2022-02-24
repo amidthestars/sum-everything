@@ -73,6 +73,7 @@ def get_models():
             ret[model] = True
     return ret
 
+
 @app.route('/get-route', methods=['GET', 'POST'])
 def get_js_link():
     adStuff = ['Advertisement', "Supported by"]
@@ -113,6 +114,7 @@ def get_js_link():
 
     message = {'article': article}
     return jsonify(message)
+
 
 @socketio.on('query')
 def query(data):

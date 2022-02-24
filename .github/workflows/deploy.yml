@@ -25,10 +25,10 @@ jobs:
             - uses: actions/cache@v2
               name: Install prettier
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
-                restore-keys: |
-                  ${{ runner.os }}-npm-
+                  path: ~/.npm
+                  key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-npm-
             - name: Run style
               run: chmod +x style.sh && ./style.sh
             - name: Notify deploy server
