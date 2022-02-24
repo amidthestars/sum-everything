@@ -30,6 +30,8 @@ if not os.path.exists(IN):
     subprocess.call(["mv", "scisummnet_release1.1__20190413", "scisummnet"])
 
 # Define processor
+
+
 def preprocess(text):
     # This is an optional function with addional project-specific postprocessing
     r1 = re.compile(r'</SECTION>|</ABSTRACT>', re.IGNORECASE)
@@ -39,46 +41,48 @@ def preprocess(text):
     text = re.sub(r2, " ", text.strip())
     return text.lstrip(("-!.,^# ")).strip()
 
+
 def worker(split, foldername):
     path = os.path.join(IN, foldername, "Documents_xml")
     article = io.open(
         os.path.join(path, os.listdir(path)[0]),
-        mode = "r",
-        encoding = "utf-8"
+        mode="r",
+        encoding="utf-8"
     ).read()
     article = clean(preprocess(article)).replace("/n ", "/n")
     path = os.path.join(IN, foldername, "summary")
     summary = io.open(
         os.path.join(path, os.listdir(path)[0]),
-        mode = "r",
-        encoding = "utf-8"
+        mode="r",
+        encoding="utf-8"
     ).read()
     summary = clean(preprocess(summary))
     if article and summary:
         return split, article, summary
 
+
 # Run concurrent processing
 if __name__ == '__main__':
     tasks = os.listdir(IN)
     splits = ["train", "validation"]
-    split_distrib = random.choices(splits, weights = [80, 20], k = len(tasks))
+    split_distrib = random.choices(splits, weights=[80, 20], k=len(tasks))
     try:
         os.makedirs(OUT)
     except FileExistsError:
         pass
     outputs = {
         split: io.open(os.path.join(OUT, f"{PREFIX}.{split}"),
-        mode = "w",
-        encoding = "utf-8")
+                       mode="w",
+                       encoding="utf-8")
         for split in splits
     }
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers = PROCESSES) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=PROCESSES) as executor:
         results = list(
             tqdm(
                 executor.map(worker, split_distrib, tasks),
-                total = len(tasks),
-                desc = f"Using {PROCESSES} Processes"
+                total=len(tasks),
+                desc=f"Using {PROCESSES} Processes"
             )
         )
         for result in results:

@@ -59,8 +59,8 @@ if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     outputs = {
         split: io.open(os.path.join(OUT, f"{PREFIX}.{split}"),
-        mode="w",
-        encoding="utf-8")
+                       mode="w",
+                       encoding="utf-8")
         for split in splits
     }
 

@@ -12,15 +12,15 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 
-parser = argparse.ArgumentParser(description = 'Get dataset statstics')
-parser.add_argument('-datasets', nargs = '+', type = str, required = True,
-                    help = 'Names of dataset(s) as defined in datasets.json')
-parser.add_argument('-samples', type = int, default = 1000,
-                    help = 'Number of samples per dataset to calculate from')
-parser.add_argument('-in_len', type = int, default = 2048,
-                    help = 'Maximum length of input. Inputs will be padded to this length.')
-parser.add_argument('-out_len', type = int, default = 512,
-                    help = 'Maximum length of output. Outputs will be padded to this length.')
+parser = argparse.ArgumentParser(description='Get dataset statstics')
+parser.add_argument('-datasets', nargs='+', type=str, required=True,
+                    help='Names of dataset(s) as defined in datasets.json')
+parser.add_argument('-samples', type=int, default=1000,
+                    help='Number of samples per dataset to calculate from')
+parser.add_argument('-in_len', type=int, default=2048,
+                    help='Maximum length of input. Inputs will be padded to this length.')
+parser.add_argument('-out_len', type=int, default=512,
+                    help='Maximum length of output. Outputs will be padded to this length.')
 args = parser.parse_args()
 
 # Register dataset as a mixture
@@ -41,17 +41,17 @@ for dataset in args.datasets:
 seqio.MixtureRegistry.add(
     "all_mix",
     args.datasets,
-    default_rate = 1.0
+    default_rate=1.0
 )
 
 # Run statistcs
 train_ds = seqio.MixtureRegistry.get("all_mix").get_dataset(
-    split = "train",
-    sequence_length = {"inputs": args.in_len, "targets": args.out_len}
+    split="train",
+    sequence_length={"inputs": args.in_len, "targets": args.out_len}
 )
 validation_ds = seqio.MixtureRegistry.get("all_mix").get_dataset(
-    split = "validation",
-    sequence_length = {"inputs": args.in_len, "targets": args.out_len}
+    split="validation",
+    sequence_length={"inputs": args.in_len, "targets": args.out_len}
 )
 train = list(tfds.as_numpy(train_ds.take(args.samples)))
 validation = list(tfds.as_numpy(validation_ds.take(args.samples)))

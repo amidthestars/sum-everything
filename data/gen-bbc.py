@@ -20,7 +20,7 @@ overall_count = [0, 0]
 path = os.getcwd()
 
 if not os.path.exists("bbc.zip"):
-    gdown.download(DATA_URL, "bbc.zip", quiet = False)
+    gdown.download(DATA_URL, "bbc.zip", quiet=False)
 if not os.path.exists(IN):
     os.mkdir(IN)
     if zipfile.is_zipfile("bbc.zip"):
@@ -28,7 +28,7 @@ if not os.path.exists(IN):
         for file in fz.namelist():
             fz.extract(file, ".")
 
-os.makedirs(OUT, exist_ok = True)
+os.makedirs(OUT, exist_ok=True)
 train_data = open(os.path.join(OUT, "bbc.train"), "w")
 val_data = open(os.path.join(OUT, "bbc.validation"), "w")
 
@@ -53,7 +53,7 @@ for folder in tqdm(folders):
             cont_tgt = cont_tgt.replace("\n", " ")
             cont_tgt = cont_tgt.replace("\t", " ")
             cont_tgt = re.sub(r"([\.!?,])([a-zA-Z\'\"0-9])",
-                            r"\1 \2", cont_tgt.strip())
+                              r"\1 \2", cont_tgt.strip())
             outputs[category].write(clean(cont_src) + "\t" + clean(cont_tgt) + "\n")
             count[category] += 1
             overall_count[category] += 1

@@ -18,7 +18,7 @@ else:
     random.seed(int(sys.argv[1]))
 
 if not os.path.exists("tifu_datasets.zip"):
-    gdown.download(DATA_URL, "tifu_datasets.zip", quiet = False)
+    gdown.download(DATA_URL, "tifu_datasets.zip", quiet=False)
 if not os.path.exists(IN):
     os.mkdir(IN)
     subprocess.call(['unzip', '-o', "tifu_datasets.zip", '-d', "../data/tifu"])
@@ -31,21 +31,21 @@ except FileExistsError:
     pass
 outputs = {
     split: io.open(os.path.join(OUT, f"{PREFIX}.{split}"),
-    mode = "w",
-    encoding = "utf-8")
+                   mode="w",
+                   encoding="utf-8")
     for split in splits
 }
 
 lineCount = 0
-with io.open(os.path.join(IN, file), mode = "r", encoding = "utf8") as f:
+with io.open(os.path.join(IN, file), mode="r", encoding="utf8") as f:
     for line in f:
         lineCount += 1
 
-splitList = random.choices(splits, weights = [80, 20], k = lineCount)
+splitList = random.choices(splits, weights=[80, 20], k=lineCount)
 
-with io.open(os.path.join(IN, file), mode = "r", encoding = "utf8") as f:
+with io.open(os.path.join(IN, file), mode="r", encoding="utf8") as f:
     splitIndex = 0
-    for line in tqdm(f, total = lineCount):
+    for line in tqdm(f, total=lineCount):
         data = json.loads(line)
         if data["tldr"]:
             tldr = data["tldr"]
