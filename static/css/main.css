@@ -1,17 +1,17 @@
 .quicksand {
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
 }
 
 ::selection {
-    background: #E9D8FD;
-    color:#202684;
+    background: #e9d8fd;
+    color: #202684;
 
     /* WebKit/Blink Browsers */
 }
 
 ::-moz-selection {
-    background: #E9D8FD;
-    color:#202684;
+    background: #e9d8fd;
+    color: #202684;
     /* Gecko Browsers */
 }
 
@@ -19,7 +19,7 @@ a:not(.nav) {
     font-weight: bold;
     text-decoration: none;
     padding: 2px;
-    background: linear-gradient(to right, #5A67D8, #5A67D8);
+    background: linear-gradient(to right, #5a67d8, #5a67d8);
     background-repeat: repeat-x;
     background-size: 100% 2px;
     background-position: 0 95%;
@@ -31,11 +31,11 @@ a:not(.nav) {
 }
 
 a:hover {
-    color: #B794F4;
+    color: #b794f4;
     font-weight: bold;
     text-decoration: none;
     padding-bottom: 2px;
-    background: linear-gradient(to right, #9F7AEA, #E9D8FD);
+    background: linear-gradient(to right, #9f7aea, #e9d8fd);
     background-repeat: repeat-x;
     background-size: 100% 2px;
     background-position: 50% 95%;
@@ -64,7 +64,7 @@ div {
     position: relative;
     display: inline-block;
 }
-  
+
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 140px;
@@ -81,7 +81,7 @@ div {
     opacity: 0;
     transition: opacity 0.3s;
 }
-  
+
 .tooltip .tooltiptext::after {
     content: "";
     position: absolute;
@@ -92,7 +92,7 @@ div {
     border-style: solid;
     border-color: #555 transparent transparent transparent;
 }
-  
+
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
@@ -105,7 +105,7 @@ a:focus {
 
 ::-webkit-scrollbar {
     width: 6px !important;
-    visibility:hidden;
+    visibility: hidden;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -116,37 +116,37 @@ body:hover::-webkit-scrollbar-thumb {
     background: #747474;
 }
 body.scrolling::-webkit-scrollbar-thumb,
-::-webkit-scrollbar-thumb:horizontal:hover, 
+::-webkit-scrollbar-thumb:horizontal:hover,
 ::-webkit-scrollbar-thumb:vertical:hover {
     background: #747474;
-    visibility:visible;
+    visibility: visible;
 }
 ::-webkit-scrollbar-thumb:horizontal:active,
-::-webkit-scrollbar-thumb:vertical:active {   
+::-webkit-scrollbar-thumb:vertical:active {
     background: #747474;
-    visibility:visible;
+    visibility: visible;
 }
 
 .loader {
-	border-top-color: #3498db;
-	-webkit-animation: spinner 1.5s linear infinite;
-	animation: spinner 1.5s linear infinite;
+    border-top-color: #3498db;
+    -webkit-animation: spinner 1.5s linear infinite;
+    animation: spinner 1.5s linear infinite;
 }
 
 @-webkit-keyframes spinner {
-	0% {
-		-webkit-transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spinner {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

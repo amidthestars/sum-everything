@@ -3,18 +3,18 @@ function load(_callback) {
     setTheme(getTheme());
 
     // On page load, check if there are stored articles. If not, load empty, if so, load omst recent
-    let init_article = getArticles(most_recent=true)
-    showArticle((init_article) ? init_article : current_id);
+    let init_article = getArticles((most_recent = true));
+    showArticle(init_article ? init_article : current_id);
 
     // On page load, show summary history
-    showHistory()
+    showHistory();
 
     // On page load, get models avaiable
-    getModels()
+    getModels();
 
-    _callback()
+    _callback();
 }
 
-load(function() {
-    loader.remove()
+load(function () {
+    loader.remove();
 });

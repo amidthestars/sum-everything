@@ -51,11 +51,13 @@ acks = {
     }
 }
 
-@app.route('/', methods = ['GET'])
+
+@app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
 
-@app.route("/v1/models", methods = ['GET'])
+
+@app.route("/v1/models", methods=['GET'])
 def get_models():
     # TODO: do not hardcode urls
     models = re.findall(r"name: '(.*?)'", requests.get(MODEL_CONFIG).text)
@@ -69,12 +71,14 @@ def get_models():
             ret[model] = True
     return ret
 
+
 @socketio.on('query')
 def query(data):
     model, inputs = data["model"], data["input"]
     emit('model_ack', dict(status="received", **acks["received"]))
     inputs = clean(inputs)
-    emit('model_ack', dict(status="cleaned", inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
+    emit('model_ack', dict(status="cleaned",
+         inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
     data = {"inputs": [inputs]}
     response = requests.post(f"{MODEL_URL}{model}:predict", json=data)
     if response.status_code == 200:
@@ -84,7 +88,8 @@ def query(data):
             response[label] = [parse(entry) for entry in response[label]]
 
         # Prepare socket emit
-        emit('model_response', dict(status="success", **response, **acks["success"]))
+        emit('model_response', dict(
+            status="success", **response, **acks["success"]))
     else:
         emit(
             'model_response',
@@ -94,6 +99,7 @@ def query(data):
                 **acks["error"]
             )
         )
+
 
 if __name__ == "__main__":
     app.run(port=7000)
