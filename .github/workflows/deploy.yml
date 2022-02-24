@@ -23,7 +23,7 @@ jobs:
               with:
                   path: ".ci/requirements.txt"
             - uses: actions/cache@v2
-              name: Install prettier
+              name: Install Prettier
               with:
                   path: ~/.npm
                   key: ${{ runner.os }}-npm-${{ hashFiles('**/workflows/prettier.yml') }}
