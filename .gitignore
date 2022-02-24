@@ -152,3 +152,4 @@ data/bbc.validation
 data/bbc.zip
 test.txt
 node-modules
+.vscode/*
