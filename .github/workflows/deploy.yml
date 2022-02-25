@@ -31,5 +31,7 @@ jobs:
                       ${{ runner.os }}-npm-
             - name: Run style
               run: chmod +x style.sh && ./style.sh
+            - name: Run unit tests
+              run: chmod +x unittests.sh && ./unittests.sh
             - name: Notify deploy server
               run: 'curl -X POST ${{ secrets.PROD_URL }} -d ''{"ref": "refs/heads/web_page"}'''
