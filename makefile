@@ -8,6 +8,11 @@ tests:
 
 clean:
 	rm -rf __pycache__ .pytest_cache
+	rm -rf datasets node_modules data
+
+requirements:
+	sudo -H pip3 install -r .ci/requirements.txt
+	sudo -H pip3 install -r requirements.txt
 
 stackup:
 	gunicorn --worker-class eventlet -w 1 main:app
