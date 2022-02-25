@@ -4,21 +4,20 @@ Ideas:
     - no actually update to edit mode and do not update contents
 '''
 
-import re
 import os
+import nltk
 import requests
 import httpimport
-from flask import Flask, render_template, request, jsonify
-from flask_socketio import SocketIO, emit
 from bs4 import BeautifulSoup
-import nltk
+from flask_socketio import SocketIO, emit
+from src.model import get_models, query_model
+from flask import Flask, render_template, request, jsonify
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
-MODEL_CONFIG = "https://storage.googleapis.com/sum-exported/models.config"
-MODEL_URL = "155.248.202.186"
+MODEL_IP = "155.248.202.186"
 MODEL_PORT = 3000
-MODEL_URL = f"http://{MODEL_URL}:{MODEL_PORT}/v1/models/"
+MODEL_URL = f"http://{MODEL_IP}:{MODEL_PORT}/v1/models/"
 
 # Flask instance; allows for instance (database) outside folder
 app = Flask(__name__, instance_relative_config=True)
@@ -60,22 +59,14 @@ def index():
 
 
 @app.route("/v1/models", methods=['GET'])
-def get_models():
-    # TODO: do not hardcode urls
-    models = re.findall(r"name: '(.*?)'", requests.get(MODEL_CONFIG).text)
-    # Check which ones are enabled
-    ret = {}
-    for model in models:
-        model_status = requests.get(f"{MODEL_URL}{model}").json()
-        if "error" in model_status:
-            ret[model] = False
-        else:
-            ret[model] = True
-    return ret
+def models():
+    return get_models()
 
 
+# TODO: update route name to something that better represents endpoint purpose
 @app.route('/get-route', methods=['GET', 'POST'])
-def get_js_link():
+def get_js_link():  # TODO: function name should match route name
+    # TODO: create new file for this in /src. write unit tests for it.
     adStuff = ['Advertisement', "Supported by"]
     url = request.get_json()
     try:
@@ -85,6 +76,7 @@ def get_js_link():
         # Return if error in getting to link
         return "0"
 
+    # TODO: is this chacked? if not, consider checking if it is already downloaded
     nltk.download('punkt')
 
     soup = BeautifulSoup(page.text, "html.parser")
@@ -113,36 +105,27 @@ def get_js_link():
             break
 
     message = {'article': article}
+    # TODO: no need for jsonify, flask already does this if dict is returned
     return jsonify(message)
 
 
 @socketio.on('query')
 def query(data):
+    # Grab varaibles
     model, inputs = data["model"], data["input"]
     emit('model_ack', dict(status="received", **acks["received"]))
-    inputs = clean(inputs)
-    emit('model_ack', dict(status="cleaned",
-         inputs=inputs.replace("/n", "\n"), **acks["cleaned"]))
-    data = {"inputs": [inputs]}
-    response = requests.post(f"{MODEL_URL}{model}:predict", json=data)
-    if response.status_code == 200:
-        # Response cleanup
-        response = response.json()['outputs']
-        for label in response:
-            response[label] = [parse(entry) for entry in response[label]]
 
-        # Prepare socket emit
-        emit('model_response', dict(
-            status="success", **response, **acks["success"]))
-    else:
-        emit(
-            'model_response',
-            dict(
-                status="error",
-                info=f"Model server returned {response.status_code}\nInfo: {response.content}",
-                **acks["error"]
-            )
-        )
+    # Clean text
+    inputs = clean(inputs)
+    emit('model_ack', dict(status="cleaned", inputs=parse(inputs), **acks["cleaned"]))
+
+    # Model query
+    try:
+        response = query_model(model, inputs)
+        # Emit response
+        emit('model_response', dict(status="success", **response, **acks["success"]))
+    except RuntimeError as e:
+        emit('model_response', dict(status="error", info=e.__repr__, **acks["error"]))
 
 
 if __name__ == "__main__":
