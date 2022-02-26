@@ -1,5 +1,6 @@
 // Template article field and textbox
 let current_id = String(+new Date());
+const url_template = document.createElement("input");
 const text_template = document.createElement("p");
 const input_template = document.createElement("div");
 const input_template_textarea = document.createElement("textarea");
@@ -10,7 +11,19 @@ const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 input_template_textarea.id = "input-textarea";
 input_template_textarea.rows = 10;
 input_template_textarea.placeholder = "Type or paste something...";
+url_template.placeholder = "Enter a URL...";
 text_template.classList.add("mb-8");
+url_template.type = "text";
+url_template.id = "url-text";
+url_template.classList.add(
+    "inherit",
+    "p-2",
+    "w-full",
+    "rounded-lg",
+    "border",
+    "border-gray-400",
+    "shake-constant"
+);
 input_template_textarea.classList.add(
     "inherit",
     "p-2",
@@ -55,7 +68,7 @@ const summary_text = document.getElementById("summary-text");
 const dark_mode_toggle = document.querySelector(".js-change-theme");
 const body = document.querySelector("body");
 
-// Get DOM elements to upload a link
+// Get DOM elements to upload a link & check whether URl was last used
 const upload_link_toggle = document.querySelector(".js-upload-link");
 
 // Get DOM elements needed to read text files

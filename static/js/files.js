@@ -46,6 +46,8 @@ file_input.addEventListener("change", function () {
                 // Create new article
                 showAlert(article_alert, "Article submitted!", "green");
                 setArticle(String(+new Date()), fr.result);
+
+                usingURL = false;
             }
         }
     };
