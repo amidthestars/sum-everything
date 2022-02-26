@@ -18,13 +18,7 @@ file_input.addEventListener("change", function () {
             alertStr =
                 "Input length cannot be less than 20 or more than 5000 characters. Current length: " +
                 fr.result.length;
-            showAlert(
-                article_alert,
-                alertStr,
-                "red",
-                ["fa-exclamation-triangle"],
-                20000
-            );
+            showAlert(article_alert, alertStr, "red", ["fa-exclamation-triangle"], 20000);
         } else {
             // CheckAscii holds array of values not in normal unicode "ascii" area
             checkAscii = fr.result.match(/[^\u0000-\u007f]/);

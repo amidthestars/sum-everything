@@ -65,12 +65,12 @@ function showArticle(article, edit = false, url_mode = false) {
     let [text, summary] = getArticle(article);
     showSummary(summary);
     showHistory();
-    if ( (text == null && url_mode == false) || edit == true) {
+    if ((text == null && url_mode == false) || edit == true) {
         temp_element = input_template;
         temp_element.children[0].value = text;
         edit_text_toggle.classList.replace("fa-pen-nib", "fa-save");
         upload_link_toggle.classList.replace("fa-save", "fa-link");
-    } else if (url_mode == true){
+    } else if (url_mode == true) {
         url_template.value = null;
         temp_element = url_template;
         upload_link_toggle.classList.replace("fa-link", "fa-save");
@@ -161,12 +161,9 @@ edit_text_toggle.addEventListener("click", () => {
         } else {
             setArticle(current_id, input_text.value);
             showArticle(current_id, (edit = false));
-
-
         }
     } else if (edit_text_toggle.classList.contains("fa-pen-nib")) {
         showArticle(current_id, (edit = true));
-
     }
 });
 
