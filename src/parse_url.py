@@ -1,12 +1,10 @@
 # TODO: Write unit tests
 import nltk
 import requests
-import urllib.request
 from bs4 import BeautifulSoup
 
 
 def parse_url(url):
-    adStuff = ['Advertisement', "Supported by"]
     try:
         page = requests.get(url)
     except Exception as e:
