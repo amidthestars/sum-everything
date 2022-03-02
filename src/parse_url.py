@@ -46,3 +46,4 @@ def parse_url(url):
 
     message = {'article': article}
     return message
+    
