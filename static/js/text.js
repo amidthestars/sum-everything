@@ -183,7 +183,7 @@ upload_link_toggle.addEventListener("click", () => {
         }
 
         // Send data to flask backend to scrape from page
-        fetch(`${window.origin}/get-route`, {
+        fetch(`${window.origin}/parse-js-link`, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify(input_text.value),

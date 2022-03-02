@@ -11,6 +11,7 @@ import httpimport
 from bs4 import BeautifulSoup
 from flask_socketio import SocketIO, emit
 from src.model import get_models, query_model
+from src.parse_url import parse_url
 from flask import Flask, render_template, request, jsonify
 
 # For file uploads
@@ -63,50 +64,9 @@ def models():
     return get_models()
 
 
-# TODO: update route name to something that better represents endpoint purpose
-@app.route('/get-route', methods=['GET', 'POST'])
-def get_js_link():  # TODO: function name should match route name
-    # TODO: create new file for this in /src. write unit tests for it.
-    adStuff = ['Advertisement', "Supported by"]
-    url = request.get_json()
-    try:
-        page = requests.get(url)
-    except Exception as e:
-        print(e)
-        # Return if error in getting to link
-        return "0"
-
-    # TODO: is this chacked? if not, consider checking if it is already downloaded
-    nltk.download('punkt')
-
-    soup = BeautifulSoup(page.text, "html.parser")
-
-    links = soup.find_all('p', attrs={'class': 'css-axufdj evys1bk0'})
-
-    article = ''
-
-    for e in links:
-        m = e.getText()
-
-        if m in adStuff:
-            continue
-
-        # If less, then add it
-        if len(article + m) <= 5000:
-            article = article + m
-        else:
-            sentences = nltk.tokenize.sent_tokenize(m)
-            for sent in sentences:
-                if len(article + ' ' + sent) <= 5000:
-                    article = article + ' ' + sent
-                else:
-                    break
-
-            break
-
-    message = {'article': article}
-    # TODO: no need for jsonify, flask already does this if dict is returned
-    return jsonify(message)
+@app.route('/parse-js-link', methods=['GET', 'POST'])
+def parse_js_link():
+    return parse_url(request.get_json())
 
 
 @socketio.on('query')
