@@ -2,49 +2,47 @@
 import nltk
 import requests
 from bs4 import BeautifulSoup
-from flask import request
-
 
 def parse_url(url):
-	adStuff = ['Advertisement', "Supported by"]
-	try:
-		page = requests.get(url)
-	except Exception as e:
-		print(e)
-		# Return if error in getting to link
-		return "0"
-		
-	# Check whether punkt is downloaded for sentence parsing
-	try:
-		nltk.data.find('tokenizers/punkt')
-	except LookupError:
-		print(LookupError)
-		nltk.download('punkt')
+    adStuff = ['Advertisement', "Supported by"]
+    try:
+        page = requests.get(url)
+    except Exception as e:
+        print(e)
+        # Return if error in getting to link
+        return "0"
 
-	soup = BeautifulSoup(page.text, "html.parser")
+    # Check whether punkt is downloaded for sentence parsing
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        print(LookupError)
+        nltk.download('punkt')
 
-	links = soup.find_all('p', attrs={'class': 'css-axufdj evys1bk0'})
+    soup = BeautifulSoup(page.text, "html.parser")
 
-	article = ''
+    links = soup.find_all('p', attrs={'class': 'css-axufdj evys1bk0'})
 
-	for e in links:
-		m = e.getText()
+    article = ''
 
-		if m in adStuff:
-			continue
+    for e in links:
+        m = e.getText()
 
-		# If less, then add it
-		if len(article + m) <= 5000:
-			article = article + m
-		else:
-			sentences = nltk.tokenize.sent_tokenize(m)
-			for sent in sentences:
-				if len(article + ' ' + sent) <= 5000:
-					article = article + ' ' + sent
-				else:
-					break
+        if m in adStuff:
+            continue
 
-			break
+        # If less, then add it
+        if len(article + m) <= 5000:
+            article = article + m
+        else:
+            sentences = nltk.tokenize.sent_tokenize(m)
+            for sent in sentences:
+                if len(article + ' ' + sent) <= 5000:
+                    article = article + ' ' + sent
+                else:
+                    break
 
-	message = {'article': article}
-	return message
+            break
+
+    message = {'article': article}
+    return message

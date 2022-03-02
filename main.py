@@ -5,14 +5,11 @@ Ideas:
 '''
 
 import os
-import nltk
-import requests
 import httpimport
-from bs4 import BeautifulSoup
 from flask_socketio import SocketIO, emit
 from src.model import get_models, query_model
 from src.parse_url import parse_url
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 
 # For file uploads
 ALLOWED_EXTENSIONS = {'txt'}
