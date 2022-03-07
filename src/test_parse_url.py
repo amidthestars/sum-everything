@@ -1,4 +1,7 @@
+import nltk
 from parse_url import parse_url
+
+nltk.download()
 
 def test_bad_url():
     url = "abcdefg"
