@@ -55,6 +55,12 @@ def parse_url(url):
             mostSentences = numSentences[className][0]
             likelyArticleClass = className
 
+    print('******* {} *********'.format(mostSentences))
+
+    # If < 5 sentences likely site didn't load properly or too short
+    if mostSentences < 5:
+        return "1"
+
     article = ''
     for sent in numSentences[likelyArticleClass][1]:
         if len(article + sent) <= 5000:

@@ -201,11 +201,18 @@ upload_link_toggle.addEventListener("click", () => {
                     return;
                 }
                 response.json().then(function (article_data) {
-                    //console.log(article_data);
+                    //console.log(article_data.article.length);
                     if (article_data == 0) {
                         showAlert(article_alert, "Page could not be reached!", "red", [
                             "fa-exclamation-triangle",
                         ]);
+                    } else if (article_data == "1") {
+                        showAlert(
+                            article_alert,
+                            "Page has improper format or article is too short",
+                            "red",
+                            ["fa-exclamation-triangle"]
+                        );
                     } else {
                         setArticle(current_id, article_data.article);
                         showArticle(current_id, (edit = false));
