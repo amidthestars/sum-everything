@@ -4,3 +4,4 @@ pytest-parallel
 requests
 httpimport
 nltk
+bs4
