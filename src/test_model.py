@@ -7,13 +7,14 @@ from model import get_models, query_model
 
 
 def test_get_models_sucess():
-    result = get_models(model_config="https://storage.googleapis.com/sum-exported/example.config")
+    # Old - https://storage.googleapis.com/sum-exported/example.config
+    result = get_models(model_config="https://people.ucsc.edu/~seamedin/example.config")
     assert result == {'this-model-does-not-exist': False, 'xsum': True}
 
 
 def test_get_models_noserver():
     result = get_models(model_url="http://0.0.0.0/",
-                        model_config="https://storage.googleapis.com/sum-exported/example.config")
+                        model_config="https://people.ucsc.edu/~seamedin/example.config")
     assert result == {'this-model-does-not-exist': False, 'xsum': False}
 
 
