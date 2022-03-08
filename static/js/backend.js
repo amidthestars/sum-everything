@@ -25,10 +25,13 @@ function getModels() {
 }
 
 function getSummary(model, input) {
-    socket.emit("query", {
-        model: model,
-        input: input,
-    });
+    if (socket_available) {
+        socket_available = false;
+        socket.emit("query", {
+            model: model,
+            input: input,
+        });
+    }
 }
 
 socket.on("model_ack", function (data) {
@@ -52,6 +55,9 @@ socket.on("model_ack", function (data) {
 
 socket.on("model_response", function (data) {
     let [msg, color, icon] = [data["message"], data["color"], data["icon"]];
+    // enabling get summary button after the query
+    get_summary_button.classList.remove("pointer-events-none");
+    get_summary_button.classList.remove("opacity-50");
     switch (data["status"]) {
         case "success":
             showAlert(summary_alert, msg, color, icon, 18000);
@@ -63,6 +69,7 @@ socket.on("model_response", function (data) {
             console.log(data["info"]);
             break;
     }
+    socket_available = true;
 });
 
 socket.on("connect", function () {

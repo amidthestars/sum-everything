@@ -247,6 +247,8 @@ copy_summary_buttton.addEventListener("click", () => {
 });
 
 get_summary_button.addEventListener("click", () => {
+    get_summary_button.classList.add("pointer-events-none");
+    get_summary_button.classList.add("opacity-50");
     let [text, _] = getArticle(current_id);
     getSummary(available_models.value, text);
 });

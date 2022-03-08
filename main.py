@@ -65,24 +65,27 @@ def models():
 def parse_js_link():
     return parse_url(request.get_json())
 
-
+occupied_sockets = set()
 @socketio.on('query')
 def query(data):
-    # Grab varaibles
-    model, inputs = data["model"], data["input"]
-    emit('model_ack', dict(status="received", **acks["received"]))
+    currentid = request.sid
+    if currentid not in occupied_sockets:
+        # Grab varaibles
+        model, inputs = data["model"], data["input"]
+        emit('model_ack', dict(status="received", **acks["received"]))
 
-    # Clean text
-    inputs = clean(inputs)
-    emit('model_ack', dict(status="cleaned", inputs=parse(inputs), **acks["cleaned"]))
+        # Clean text
+        inputs = clean(inputs)
+        emit('model_ack', dict(status="cleaned", inputs=parse(inputs), **acks["cleaned"]))
 
-    # Model query
-    try:
-        response = query_model(model, inputs)
-        # Emit response
-        emit('model_response', dict(status="success", **response, **acks["success"]))
-    except RuntimeError as e:
-        emit('model_response', dict(status="error", info=e.__repr__, **acks["error"]))
+        # Model query
+        try:
+            response = query_model(model, inputs)
+            # Emit response
+            emit('model_response', dict(status="success", **response, **acks["success"]))
+        except RuntimeError as e:
+            emit('model_response', dict(status="error", info=e.__repr__, **acks["error"]))
+        occupied_sockets.remove(currentid)
 
 
 if __name__ == "__main__":
