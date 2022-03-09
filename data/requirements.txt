@@ -1,4 +1,0 @@
-gdown
-requests
-tqdm
-numpy
