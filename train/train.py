@@ -63,6 +63,13 @@ parser.add_argument('-max_checkpoints', type=int, default=None,
 parser.add_argument('-model_paralellism', type=int, default=None,
                     help='Contrary to data paralellism, model paralellism splits a model up into each accelerator, \
                             helping memory usage but reducing overall model efficiency.')
+FLAGS = tf.app.flags.FLAGS
+try:
+  argv = FLAGS(sys.argv, known_only=True)  # parse flags
+except tf.app.flags.Error as e:
+  print("hello")
+  sys.exit(1)
+
 args = parser.parse_args()
 
 if args.gpus:

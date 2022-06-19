@@ -1,6 +1,6 @@
 {
     "discord1": {
-        "bucket_path": "/content/drive/Shareddrives/Datasets/cleaned-v5",
+        "bucket_path": "gs://dscrd0612",
         "train_path": "discord-v1-detox-antispam",
         "validation_path": "discord-v1-detox-antispam",
         "compression_type": null,
@@ -8,7 +8,7 @@
     },
 
     "discord2": {
-        "bucket_path": "/content/drive/Shareddrives/Datasets/cleaned-v5",
+        "bucket_path": "gs://dscrd0612",
         "train_path": "discord-v2-detox-antispam",
         "validation_path": "discord-v2-detox-antispam",
         "compression_type": null,
@@ -16,7 +16,7 @@
     },
 
     "discord3": {
-        "bucket_path": "/content/drive/Shareddrives/Datasets/cleaned-v5",
+        "bucket_path": "gs://dscrd0612",
         "train_path": "discord-v3-detox-antispam",
         "validation_path": "discord-v3-detox-antispam",
         "compression_type": null,
@@ -24,7 +24,7 @@
     },
 
     "discord4": {
-        "bucket_path": "/content/drive/Shareddrives/Datasets/cleaned-v5",
+        "bucket_path": "gs://dscrd0612",
         "train_path": "discord-v4-detox-antispam",
         "validation_path": "discord-v4-detox-antispam",
         "compression_type": null,
@@ -32,7 +32,7 @@
     },
 
     "discord5": {
-        "bucket_path": "/content/drive/Shareddrives/Datasets/cleaned-v5",
+        "bucket_path": "gs://dscrd0612",
         "train_path": "discord-v4-detox-antispam",
         "validation_path": "discord-v4-detox-antispam",
         "compression_type": null,
